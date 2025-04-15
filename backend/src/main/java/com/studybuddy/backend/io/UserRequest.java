@@ -1,20 +1,17 @@
-package com.studybuddy.backend.model;
+package com.studybuddy.backend.io;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Document(collection = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class User {
-    @Id
-    private String id; // Unique identifier for the user
+public class UserRequest {
 
     private String password;
     private String email;
@@ -25,8 +22,6 @@ public class User {
     private String profilePictureUrl; // URL to the user's profile picture
 
     @Builder.Default
-    private Date createdAt = new Date(); // Default to current date/time
+    private Date createdAt = new Date();
 
 }
-
-// done

@@ -1,46 +1,27 @@
 package com.studybuddy.backend.controller;
 
-import com.studybuddy.backend.model.User;
-import com.studybuddy.backend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.studybuddy.backend.io.UserRequest;
+import com.studybuddy.backend.io.UserResponse;
+import com.studybuddy.backend.service.UserService;
+
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/users")
+@AllArgsConstructor
+@RequestMapping("/api")
+
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable String id) {
-        return userService.getUserById(id);
-    }
-
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody User user) {
-        return userService.updateUser(id, user);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id) {
-        userService.deleteUser(id);
+    @PostMapping("/register")
+    public UserResponse register(@RequestBody UserRequest request) {
+        return userService.registerUser(request);
     }
 
 }

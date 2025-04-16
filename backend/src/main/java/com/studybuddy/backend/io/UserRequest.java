@@ -17,11 +17,12 @@ public class UserRequest {
     private String email;
     private String firstName;
     private String lastName;
-    private boolean enabled;
     private String role; // e.g., "user", "admin"
     private String profilePictureUrl; // URL to the user's profile picture
 
     @Builder.Default
     private Date createdAt = new Date();
+    @Builder.Default
+    private boolean enabled = true; 
 
 }

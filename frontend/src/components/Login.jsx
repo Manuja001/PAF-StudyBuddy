@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< HEAD
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import background from "../assets/background.jpeg";
@@ -164,6 +165,11 @@ function Login() {
       </div>
     </div>
   );
+=======
+
+function Login() {
+  return <div>Login</div>;
+>>>>>>> e2b9b04703d8d9638576e6741cb536dabc78740b
 }
 
 export default Login;

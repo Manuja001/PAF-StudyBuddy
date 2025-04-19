@@ -1,5 +1,8 @@
 package com.studybuddy.backend.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,38 @@ public class UserServiceImp implements UserService {
 
         return convertToUserResponse(newUser);
 
+    }
+
+    @Override
+    public UserResponse getUserById(String id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return convertToUserResponse(user);
+    }
+
+    @Override
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::convertToUserResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserResponse updateUser(String id, UserRequest request) {
+        // Implement the logic to update a user
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEnabled(request.isEnabled());
+        user.setRole(request.getRole());
+        user.setProfilePictureUrl(request.getProfilePictureUrl());
+        userRepository.save(user);
+        return convertToUserResponse(user);
+    }
+
+    @Override
+    public void deleteUser(String id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.delete(user);
     }
 
     private User convertToUser(UserRequest request) {

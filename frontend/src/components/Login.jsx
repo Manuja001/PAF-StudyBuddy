@@ -1,5 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import background from "../assets/background.jpeg";
@@ -54,7 +53,7 @@ function Login() {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         toast.success("Login successful!");
-        navigate("/HomePage");
+        navigate("/Profile");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -165,11 +164,6 @@ function Login() {
       </div>
     </div>
   );
-=======
-
-function Login() {
-  return <div>Login</div>;
->>>>>>> e2b9b04703d8d9638576e6741cb536dabc78740b
 }
 
 export default Login;

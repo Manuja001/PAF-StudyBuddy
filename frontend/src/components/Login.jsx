@@ -39,13 +39,13 @@ function Login() {
     }
 
     setLoading(true);
-    console.log(formData);
 
     try {
       const response = await axios.post(
         "http://localhost:8080/api/login",
         formData
       );
+      console.log(response.data);
       if (response.status === 200) {
         const token = response.data.token;
         localStorage.setItem("token", token);
@@ -53,7 +53,7 @@ function Login() {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         toast.success("Login successful!");
-        navigate("/Profile");
+        navigate(`/Profile/${response.data.id}`);
       }
     } catch (error) {
       console.error("Error during login:", error);

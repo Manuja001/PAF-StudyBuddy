@@ -1,46 +1,60 @@
 package com.studybuddy.backend.controller;
 
-import com.studybuddy.backend.model.User;
-import com.studybuddy.backend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.studybuddy.backend.io.UserRequest;
+import com.studybuddy.backend.io.UserResponse;
+import com.studybuddy.backend.service.UserService;
+
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@CrossOrigin(origins = "*")
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 @RestController
-@RequestMapping("/api/users")
+@AllArgsConstructor
+@RequestMapping("/api")
+
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    @PostMapping("/register")
+    public UserResponse register(@RequestBody UserRequest request) {
+        // check if user already exists
+        if (userService.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("User already exists with email: " + request.getEmail());
+        }
+
+        return userService.registerUser(request);
     }
 
-    @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable String id) {
+    @GetMapping("/users/{id}")
+    public UserResponse getUserById(@PathVariable String id) {
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @GetMapping("/users")
+    public List<UserResponse> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    @PutMapping("users/{id}")
+    public UserResponse updateUser(@PathVariable String id, @RequestBody UserRequest request) {
+        return userService.updateUser(id, request);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id) {
+    @DeleteMapping("users/{id}")
+    public String deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
+        return "User deleted successfully";
     }
 
 }

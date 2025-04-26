@@ -4,6 +4,9 @@ import HomePage from "./pages/HomePage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
+import Post from "./components/Post";
+import Comments from "./components/Comments";
+import Posts from "./components/Posts";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/HomePage" element={<HomePage />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/posts" element={<Posts />} />
+        <Route path="/posts/:postId" element={<Post />} />
+        <Route path="/comments/:postId" element={<Comments />} />
       </Routes>
     </BrowserRouter>
   );

@@ -40,12 +40,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/register", "/api/login", "/", "/error").permitAll()
+                        .requestMatchers("/api/posts/**").permitAll()  // ✅ Allow public access to posts and comments
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     @Bean
@@ -54,7 +54,6 @@ public class SecurityConfig {
     }
 
     @Bean
-
     public CorsFilter corsFilter() {
         return new CorsFilter(CorsConfigurationSource());
     }
@@ -79,5 +78,4 @@ public class SecurityConfig {
 
         return new ProviderManager(authenticationProvider);
     }
-
 }

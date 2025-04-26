@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.studybuddy.backend.filters.JwtAutenticationFilter;
 import com.studybuddy.backend.service.AppUserDetailsService;
+import com.studybuddy.backend.service.CustomOAuth2UserService;
 
 import lombok.AllArgsConstructor;
 
@@ -32,6 +33,7 @@ public class SecurityConfig {
 
     private final AppUserDetailsService userDetailsService;
     private final JwtAutenticationFilter jwtAuthenticationFilter;
+    private final CustomOAuth2UserService customOAuth2UserService; // ✨ inject ready service
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,10 +44,15 @@ public class SecurityConfig {
                         .requestMatchers("/api/register", "/api/login", "/", "/error").permitAll()
                         .anyRequest()
                         .authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/api/login")
+                        .defaultSuccessUrl("/Profile", true)
+                        .failureUrl("/error")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     @Bean
@@ -54,12 +61,11 @@ public class SecurityConfig {
     }
 
     @Bean
-
     public CorsFilter corsFilter() {
-        return new CorsFilter(CorsConfigurationSource());
+        return new CorsFilter(corsConfigurationSource());
     }
 
-    private UrlBasedCorsConfigurationSource CorsConfigurationSource() {
+    private UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5174", "http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -79,5 +85,4 @@ public class SecurityConfig {
 
         return new ProviderManager(authenticationProvider);
     }
-
 }

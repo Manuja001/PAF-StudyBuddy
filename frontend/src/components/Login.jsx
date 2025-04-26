@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import background from "../assets/background.jpeg";
@@ -14,6 +14,37 @@ function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const fetchOAuthToken = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      if (code) {
+        try {
+          const response = await axios.post(
+            "http://localhost:8080/oauth2/callback/google",
+            { code },
+            { headers: { "Content-Type": "application/json" } }
+          );
+          console.log(response.data);
+          if (response.status === 200) {
+            const token = response.data.token;
+            const userId = response.data.id;
+            localStorage.setItem("token", token);
+
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+            toast.success("Login successful!");
+            navigate(`/Profile/${userId}`);
+          }
+        } catch (error) {
+          console.error("Error during OAuth login:", error);
+          toast.error("Login failed. Please try again.");
+        }
+      }
+    };
+
+    fetchOAuthToken();
+  }, [navigate]);
 
   const validateForm = () => {
     if (!formData.email || !formData.password) {
@@ -150,6 +181,7 @@ function Login() {
                 Register
               </Link>
             </p>
+
             <div className="flex justify-center">
               <button
                 type="submit"
@@ -157,6 +189,18 @@ function Login() {
                 disabled={loading}
               >
                 {loading ? "Loading..." : "Login"}
+              </button>
+            </div>
+            <div className="flex items-center justify-center mt-5">
+              <button
+                type="button"
+                onClick={() =>
+                  (window.location.href =
+                    "http://localhost:8080/oauth2/authorization/google")
+                }
+                className="text-sm uppercase border-2 px-4 py-2 text-slate-800 border-slate-300 rounded-xl hover:scale-[1.02] ease-in-out active:scale-[0.98]"
+              >
+                Continue with Google
               </button>
             </div>
           </form>

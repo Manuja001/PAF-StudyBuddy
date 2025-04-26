@@ -27,10 +27,9 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserResponse registerUser(UserRequest request) {
-        // Implement the logic to register a user
 
         User newUser = convertToUser(request);
-        // Save the user to the database
+
         userRepository.save(newUser);
 
         return convertToUserResponse(newUser);
@@ -100,6 +99,24 @@ public class UserServiceImp implements UserService {
                 .createdAt(user.getCreatedAt())
                 .bio(user.getBio())
                 .build();
+    }
+
+    public User saveOAuth2User(String email, String firstName, String lastName, String profilePictureUrl) {
+        User user = userRepository.findByEmail(email).orElseGet(() -> User.builder()
+                .email(email)
+                .firstName(firstName)
+                .lastName(lastName)
+                .profilePictureUrl(profilePictureUrl)
+                .enabled(true)
+                .role("user") // Default role
+                .build());
+
+        // Update details if changed
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setProfilePictureUrl(profilePictureUrl);
+
+        return userRepository.save(user);
     }
 
 }

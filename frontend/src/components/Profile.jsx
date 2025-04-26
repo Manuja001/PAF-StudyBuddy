@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import UserProfile from "../assets/userProfile.png";
+import UserProfile from "../assets/userProfile1.png";
 import EditIcon from "../assets/pen.png";
 
 function Profile() {
@@ -37,6 +37,19 @@ function Profile() {
   }, [id]);
   console.log(id);
 
+  // Function to handle profile picture change
+  const handleProfilePictureChange = (e) => {
+    const file = e.target.files[0];
+    console.log(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfile({ ...profile, profilePictureUrl: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Function to handle profile update
   const handleProfileUpdate = () => {
     setIsEditing(false);
@@ -44,6 +57,7 @@ function Profile() {
 
     const updateProfile = async () => {
       try {
+        console.log(profile);
         const response = await fetch(`http://localhost:8080/api/users/${id}`, {
           method: "PUT",
           headers: {
@@ -52,9 +66,6 @@ function Profile() {
           },
           body: JSON.stringify(profile),
         });
-        console.log(profile);
-        console.log(id);
-        console.log(response);
 
         if (!response.ok) {
           throw new Error("Failed to update profile data");
@@ -65,6 +76,7 @@ function Profile() {
         toast.error("Failed to update profile. Please try again.");
       }
     };
+    console.log(profile);
     updateProfile();
   };
 
@@ -104,12 +116,7 @@ function Profile() {
                   <input
                     type="file"
                     className="border p-2 rounded-md w-full"
-                    onChange={(e) =>
-                      setProfile({
-                        ...profile,
-                        profilePicture: URL.createObjectURL(e.target.files[0]),
-                      })
-                    }
+                    onChange={handleProfilePictureChange}
                   />
                 </div>
                 <div className="mb-4">
@@ -228,12 +235,7 @@ function Profile() {
           <div className="flex justify-between items-center bg-indigo-100 p-4 rounded-xl shadow">
             <span className="font-semibold text-indigo-900">Email:</span>
             <span className="text-indigo-700">{profile.email}</span>
-            <img
-              src={EditIcon}
-              alt="Edit"
-              className="w-5 h-5 cursor-pointer"
-              // onClick={}
-            />
+            <img src={EditIcon} alt="Edit" className="w-5 h-5 cursor-pointer" />
           </div>
 
           <div className="flex justify-between items-center bg-pink-100 p-4 rounded-xl shadow">
@@ -261,8 +263,8 @@ function Profile() {
               <h3 className="text-lg font-bold">Mastering Spring Boot</h3>
               <p className="text-gray-600 text-sm">Posted on Jan 12, 2024</p>
               <p className="text-gray-700 mt-2">
-                Spring Boot simplifies Java development. Here's everything you
-                need to know to get started.
+                Spring Boot simplifies Java development. Here you can find
+                everything you need to know to get started.
               </p>
             </div>
           </div>

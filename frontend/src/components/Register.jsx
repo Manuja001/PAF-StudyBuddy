@@ -40,7 +40,11 @@ function Register() {
       return;
     }
     console.log(formData);
-    const dataToSubmit = { ...formData, role: "User" };
+    const dataToSubmit = {
+      ...formData,
+      role: "User",
+      bio: "Hi I am " + formData.firstName + " " + formData.lastName,
+    };
     console.log("formDate: ", dataToSubmit);
 
     setLoading(true);

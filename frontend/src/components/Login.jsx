@@ -6,7 +6,7 @@ import email from "../assets/email.png";
 import password from "../assets/password.png";
 import showPasswordIcon from "../assets/showPassword.png";
 import hidePasswordIcon from "../assets/hidePassword.png";
-import axios from "axios";
+import axios from "../config/axios";
 import { toast } from "react-toastify";
 
 function Login() {
@@ -22,7 +22,7 @@ function Login() {
       if (code) {
         try {
           const response = await axios.post(
-            "http://localhost:8080/oauth2/callback/google",
+            "/oauth2/callback/google",
             { code },
             { headers: { "Content-Type": "application/json" } }
           );
@@ -72,16 +72,12 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/login",
-        formData
-      );
+      console.log("Form data before sending:", formData);
+      const response = await axios.post("/api/login", formData);
       console.log(response.data);
       if (response.status === 200) {
         const token = response.data.token;
         localStorage.setItem("token", token);
-        // set the token in axios headers for future requests
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         toast.success("Login successful!");
         navigate(`/Profile/${response.data.id}`);

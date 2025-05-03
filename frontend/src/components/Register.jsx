@@ -7,7 +7,7 @@ import password from "../assets/password.png";
 import user from "../assets/user.png";
 import showPasswordIcon from "../assets/showPassword.png";
 import hidePasswordIcon from "../assets/hidePassword.png";
-import axios from "axios";
+import axios from "../config/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -50,10 +50,8 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/register",
-        dataToSubmit
-      );
+      console.log(dataToSubmit);
+      const response = await axios.post("/api/register", dataToSubmit);
       if (response.status === 200) {
         toast.success("Registration successful!");
         //redirect to login or home page

@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/register", "/api/login", "/", "/error").permitAll()
+                        .requestMatchers("/api/posts/**").permitAll()  // ✅ Allow public access to posts and comments
                         .anyRequest()
                         .authenticated())
                 .oauth2Login(oauth2 -> oauth2

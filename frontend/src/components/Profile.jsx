@@ -90,6 +90,11 @@ function Profile() {
     return <div>Loading...</div>;
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login"; // Redirect to login page
+  };
+
   return (
     <div className="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen py-10">
       <div className="container mx-auto bg-white rounded-2xl shadow-xl p-10 w-[90%] max-w-3xl">
@@ -266,6 +271,20 @@ function Profile() {
                 Spring Boot simplifies Java development. Here you can find
                 everything you need to know to get started.
               </p>
+            </div>
+            <div className="text-center mt-4 flex place-content-evenly">
+              <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4">
+                View All Posts
+              </button>
+              <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4 ml-4">
+                Create New Post
+              </button>
+              <button
+                className="bg-red-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4 ml-4"
+                onClick={handleLogout}
+              >
+                Log out
+              </button>
             </div>
           </div>
         </div>

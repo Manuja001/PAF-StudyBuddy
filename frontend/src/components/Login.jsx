@@ -21,11 +21,9 @@ function Login() {
       const code = urlParams.get("code");
       if (code) {
         try {
-          const response = await axios.post(
-            "/oauth2/callback/google",
-            { code },
-            { headers: { "Content-Type": "application/json" } }
-          );
+          const response = await axios.post("/oauth2/callback/google", {
+            code,
+          });
           console.log(response.data);
           if (response.status === 200) {
             const token = response.data.token;

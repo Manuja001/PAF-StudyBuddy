@@ -60,6 +60,8 @@ public class UserServiceImp implements UserService {
         user.setEmail(request.getEmail());
         user.setProfilePictureUrl(request.getProfilePictureUrl());
         user.setBio(request.getBio());
+        user.setFollowers(request.getFollowers());
+        user.setFollowing(request.getFollowing());
         userRepository.save(user);
         return convertToUserResponse(user);
     }
@@ -82,6 +84,8 @@ public class UserServiceImp implements UserService {
                 .profilePictureUrl(request.getProfilePictureUrl())
                 .createdAt(request.getCreatedAt())
                 .bio(request.getBio())
+                .followers(request.getFollowers())
+                .following(request.getFollowing())
                 .build();
 
     }
@@ -98,6 +102,8 @@ public class UserServiceImp implements UserService {
                 .profilePictureUrl(user.getProfilePictureUrl())
                 .createdAt(user.getCreatedAt())
                 .bio(user.getBio())
+                .followers(user.getFollowers())
+                .following(user.getFollowing())
                 .build();
     }
 

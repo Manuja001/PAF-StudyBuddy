@@ -73,12 +73,26 @@ function Login() {
       console.log("Form data before sending:", formData);
       const response = await axios.post("/api/login", formData);
       console.log(response.data);
-      if (response.status === 200) {
+      if (
+        (response.status === 200 && response.data.role === "User") ||
+        response.data.role === "user" ||
+        response.data.role === "USER"
+      ) {
         const token = response.data.token;
         localStorage.setItem("token", token);
 
         toast.success("Login successful!");
         navigate(`/Profile/${response.data.id}`);
+      } else if (
+        (response.status === 200 && response.data.role === "admin") ||
+        response.data.role === "ADMIN" ||
+        response.data.role === "Admin"
+      ) {
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+
+        toast.success("Login successful!");
+        navigate(`/admin`);
       }
     } catch (error) {
       console.error("Error during login:", error);

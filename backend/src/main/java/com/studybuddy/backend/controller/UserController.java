@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -56,6 +57,11 @@ public class UserController {
     public String deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return "User deleted successfully";
+    }
+
+    @PatchMapping("users/{id}")
+    public UserResponse patchUser(@PathVariable String id, @RequestBody UserRequest request) {
+        return userService.updateUser(id, request);
     }
 
 }

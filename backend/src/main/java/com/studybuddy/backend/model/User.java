@@ -24,6 +24,8 @@ public class User {
     private String role; // e.g., "user", "admin"
     private String profilePictureUrl; // URL to the user's profile picture
     private String bio; // Short biography or description of the user
+    private Number followers;
+    private Number following;
 
     @Builder.Default
     private Date createdAt = new Date(); // Default to current date/time

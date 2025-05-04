@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import UserProfile from "../assets/userProfile1.png";
 import EditIcon from "../assets/pen.png";
+import axios from "../config/axios";
 
 function Profile() {
   const { id } = useParams();
-  const [followed, setFollowed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const [profile, setProfile] = useState(null);
@@ -15,19 +15,8 @@ function Profile() {
     // Fetch user profile data from API
     const fetchProfile = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/users/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        console.log(id);
-        if (!response.ok) {
-          throw new Error("Failed to fetch profile data");
-        }
-        const data = await response.json();
-        setProfile(data);
+        const response = await axios.get(`/api/users/${id}`, {});
+        setProfile(response.data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
         toast.error("Failed to load profile data. Please try again.");
@@ -78,11 +67,6 @@ function Profile() {
     };
     console.log(profile);
     updateProfile();
-  };
-
-  // Function to handle follow/unfollow
-  const toggleFollow = () => {
-    setFollowed(!followed);
   };
 
   if (!profile) {
@@ -214,11 +198,15 @@ function Profile() {
         {/* Stats Section */}
         <div className="grid grid-cols-2 gap-4 text-center mb-6">
           <div className="bg-green-100 p-4 rounded-xl shadow hover:scale-105 transition">
-            <p className="text-2xl font-bold text-green-600">120</p>
+            <p className="text-2xl font-bold text-green-600">
+              {profile.followers}
+            </p>
             <p className="text-sm font-medium text-gray-700">Followers</p>
           </div>
           <div className="bg-yellow-100 p-4 rounded-xl shadow hover:scale-105 transition">
-            <p className="text-2xl font-bold text-yellow-600">89</p>
+            <p className="text-2xl font-bold text-yellow-600">
+              {profile.following}
+            </p>
             <p className="text-sm font-medium text-gray-700">Following</p>
           </div>
         </div>
@@ -226,12 +214,10 @@ function Profile() {
         {/* Follow Button */}
         <div className="text-center mb-6">
           <button
-            onClick={toggleFollow}
-            className={`${
-              followed ? "bg-gray-300" : "bg-blue-500"
-            } text-white px-6 py-2 rounded-full hover:scale-105 transition`}
+            className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+            onClick={Navigate(`/chat`)}
           >
-            {followed ? "Unfollow" : "Follow"}
+            Chat Bot
           </button>
         </div>
 

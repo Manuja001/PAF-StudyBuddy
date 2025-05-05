@@ -6,8 +6,8 @@ import email from "../assets/email.png";
 import password from "../assets/password.png";
 import showPasswordIcon from "../assets/showPassword.png";
 import hidePasswordIcon from "../assets/hidePassword.png";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axios from '../config/axios';
 
 function Login() {
   const [formData, setFormData] = useState({});

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import './Comments.css';
+import axios from '../config/axios';
 
 // Confirmation Dialog Component
 const ConfirmDialog = ({ isOpen, message, onConfirm, onCancel }) => {

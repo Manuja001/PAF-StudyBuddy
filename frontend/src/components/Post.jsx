@@ -4,6 +4,7 @@ import axios from '../config/axios';
 import Comments from './Comments';
 import './Post.css';
 
+
 const Post = () => {
   const { postId } = useParams();
   const navigate = useNavigate();

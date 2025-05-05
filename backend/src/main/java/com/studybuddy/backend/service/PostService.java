@@ -4,6 +4,7 @@ import com.studybuddy.backend.model.Post;
 import com.studybuddy.backend.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,8 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public Post createPost(Post post) {
+    public Post createPost(Post post, String userId) {
+        post.setemail(userId);
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(LocalDateTime.now());
         return postRepository.save(post);
@@ -45,4 +47,4 @@ public class PostService {
     public void deletePost(String id) {
         postRepository.deleteById(id);
     }
-} 
+}

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from '../config/axios';
 import './Posts.css';
 
+
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);

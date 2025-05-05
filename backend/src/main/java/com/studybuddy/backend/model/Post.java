@@ -4,11 +4,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
+
 @Document(collection = "posts")
 public class Post {
     @Id
     private String id;
-    private String userId;
+    private String email;
     private String title;
     private String content;
     private String skillLevel;
@@ -30,12 +31,12 @@ public class Post {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getemail() {
+        return email;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setemail(String setemail) {
+        this.email = setemail;
     }
 
     public String getTitle() {

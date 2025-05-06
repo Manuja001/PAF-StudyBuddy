@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import './Comments.css';
-import axios from '../config/axios';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import "./Comments.css";
+import axios from "../config/axios";
+import PropTypes from "prop-types";
 
-// Confirmation Dialog Component
 const ConfirmDialog = ({ isOpen, message, onConfirm, onCancel }) => {
   if (!isOpen) return null;
 
@@ -12,67 +12,66 @@ const ConfirmDialog = ({ isOpen, message, onConfirm, onCancel }) => {
       <div className="confirm-dialog">
         <p>{message}</p>
         <div className="confirm-actions">
-          <button onClick={onConfirm} className="confirm-btn">OK</button>
-          <button onClick={onCancel} className="cancel-btn">Cancel</button>
+          <button onClick={onConfirm} className="confirm-btn">
+            OK
+          </button>
+          <button onClick={onCancel} className="cancel-btn">
+            Cancel
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-// Configure axios base URL and defaults
-axios.defaults.baseURL = 'http://localhost:8080';
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+ConfirmDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};
 
 const Comments = () => {
   const { postId } = useParams();
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
-  const [editText, setEditText] = useState('');
-  const [error, setError] = useState(null);
+  const [editText, setEditText] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState({ text: '', type: '' }); // For success/error messages
+  const [message, setMessage] = useState({ text: "", type: "" });
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
-    message: '',
-    onConfirm: null
+    message: "",
+    onConfirm: null,
   });
 
   useEffect(() => {
-    if (postId) {
-      fetchComments();
-    }
+    if (postId) fetchComments();
   }, [postId]);
 
-  // Clear message after 3 seconds
   useEffect(() => {
     if (message.text) {
-      const timer = setTimeout(() => {
-        setMessage({ text: '', type: '' });
-      }, 3000);
+      const timer = setTimeout(() => setMessage({ text: "", type: "" }), 3000);
       return () => clearTimeout(timer);
     }
   }, [message]);
 
-  const showMessage = (text, type = 'success') => {
-    setMessage({ text, type });
-  };
+  const showMessage = (text, type = "success") => setMessage({ text, type });
 
   const fetchComments = async () => {
     try {
       setLoading(true);
-      setError(null);
       const response = await axios.get(`/api/posts/${postId}/comments`);
-      const commentsWithIds = Array.isArray(response.data) ? response.data.map(comment => ({
-        ...comment,
-        _id: comment._id || comment.id || Math.random().toString(36).substr(2, 9)
-      })) : [];
-      setComments(commentsWithIds);
-    } catch (error) {
-      console.error('Error fetching comments:', error.response || error);
-      showMessage('Failed to load comments. Please try again later.', 'error');
+      const data = Array.isArray(response.data) ? response.data : [];
+      const formatted = data.map((c) => ({
+        ...c,
+        _id: c._id || c.id || crypto.randomUUID(),
+      }));
+      setComments(formatted);
+    } catch (err) {
+      console.error("Fetch error:", err);
+      showMessage("Failed to load comments.", "error");
     } finally {
       setLoading(false);
     }
@@ -81,102 +80,83 @@ const Comments = () => {
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (!newComment.trim() || submitting) return;
-
     try {
+      console.log("Adding comment:", newComment);
       setSubmitting(true);
       const response = await axios.post(`/api/posts/${postId}/comments`, {
         content: newComment,
       });
-      const newCommentWithId = {
+      const created = {
         ...response.data,
-        _id: response.data._id || response.data.id || Math.random().toString(36).substr(2, 9)
+        _id: response.data._id || response.data.id || crypto.randomUUID(),
       };
-      setComments(prevComments => [newCommentWithId, ...prevComments]);
-      setNewComment('');
-      showMessage('Comment added successfully!');
-    } catch (error) {
-      console.error('Error adding comment:', error.response || error);
-      showMessage('Failed to add comment. Please try again.', 'error');
+      setComments([created, ...comments]);
+      setNewComment("");
+      showMessage("Comment added successfully!");
+    } catch (err) {
+      console.error("Add error:", err);
+      showMessage("Failed to add comment.", "error");
     } finally {
       setSubmitting(false);
     }
   };
 
   const showConfirmDialog = (message, onConfirm) => {
-    setConfirmDialog({
-      isOpen: true,
-      message,
-      onConfirm
-    });
+    setConfirmDialog({ isOpen: true, message, onConfirm });
   };
 
   const handleConfirm = async () => {
-    if (confirmDialog.onConfirm) {
-      await confirmDialog.onConfirm();
-    }
-    setConfirmDialog({ isOpen: false, message: '', onConfirm: null });
+    if (confirmDialog.onConfirm) await confirmDialog.onConfirm();
+    setConfirmDialog({ isOpen: false, message: "", onConfirm: null });
   };
 
-  const handleCancel = () => {
-    setConfirmDialog({ isOpen: false, message: '', onConfirm: null });
-  };
+  const handleCancel = () =>
+    setConfirmDialog({ isOpen: false, message: "", onConfirm: null });
 
   const handleUpdateComment = async (commentId) => {
     if (!editText.trim()) return;
 
-    showConfirmDialog(
-      'Are you sure you want to update this comment?',
-      async () => {
-        try {
-          const response = await axios.put(`/api/comments/${commentId}`, {
-            content: editText,
-            postId: postId
-          });
-
-          if (response.data) {
-            setComments(prevComments => 
-              prevComments.map(comment => 
-                comment._id === commentId ? { ...comment, content: editText } : comment
-              )
-            );
-            setEditingComment(null);
-            setEditText('');
-            showMessage('Comment updated successfully!');
-          }
-        } catch (error) {
-          console.error('Error updating comment:', error.response || error);
-          showMessage('Failed to update comment. Please try again.', 'error');
+    showConfirmDialog("Update this comment?", async () => {
+      try {
+        const res = await axios.put(`/api/comments/${commentId}`, {
+          content: editText,
+          postId,
+        });
+        if (res.data) {
+          setComments(
+            comments.map((c) =>
+              c._id === commentId ? { ...c, content: editText } : c
+            )
+          );
+          setEditingComment(null);
+          setEditText("");
+          showMessage("Comment updated!");
         }
+      } catch (err) {
+        console.error("Update error:", err);
+        showMessage("Failed to update comment.", "error");
       }
-    );
+    });
   };
 
   const handleDeleteComment = async (commentId) => {
-    showConfirmDialog(
-      'Are you sure you want to delete this comment? This action cannot be undone.',
-      async () => {
-        try {
-          const response = await axios.delete(`/api/comments/${commentId}`);
-
-          if (response.status === 200 || response.status === 204) {
-            setComments(prevComments => 
-              prevComments.filter(comment => comment._id !== commentId)
-            );
-            showMessage('Comment deleted successfully!');
-          } else {
-            throw new Error('Failed to delete comment');
-          }
-        } catch (error) {
-          console.error('Error deleting comment:', error.response || error);
-          showMessage('Failed to delete comment. Please try again.', 'error');
+    showConfirmDialog("Delete this comment?", async () => {
+      try {
+        const res = await axios.delete(`/api/comments/${commentId}`);
+        if (res.status === 200 || res.status === 204) {
+          setComments(comments.filter((c) => c._id !== commentId));
+          showMessage("Comment deleted!");
+        } else {
+          throw new Error("Delete failed");
         }
+      } catch (err) {
+        console.error("Delete error:", err);
+        showMessage("Failed to delete comment.", "error");
       }
-    );
+    });
   };
 
-  if (!postId) {
-    return <div className="error">No post ID provided</div>;
-  }
+  if (!postId) return <div className="error">Post ID missing.</div>;
 
   return (
     <div className="comments-container">
@@ -186,16 +166,13 @@ const Comments = () => {
         onConfirm={handleConfirm}
         onCancel={handleCancel}
       />
-      
+
       <h2>Comments ({comments.length})</h2>
-      
-      {/* Message popup */}
+
       {message.text && (
-        <div className={`message ${message.type}`}>
-          {message.text}
-        </div>
+        <div className={`message ${message.type}`}>{message.text}</div>
       )}
-      
+
       <form onSubmit={handleAddComment} className="comment-form">
         <textarea
           value={newComment}
@@ -204,84 +181,76 @@ const Comments = () => {
           required
           disabled={submitting}
         />
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={!newComment.trim() || submitting}
-          className={submitting ? 'submitting' : ''}
+          className={submitting ? "submitting" : ""}
         >
-          {submitting ? 'Adding...' : 'Add Comment'}
+          {submitting ? "Adding..." : "Add Comment"}
         </button>
       </form>
 
-      {loading && <div className="loading">Loading comments...</div>}
-      
-      {error && <div className="error">{error}</div>}
+      {loading && <div className="loading">Loading...</div>}
+      {!loading && comments.length === 0 && <p>No comments yet.</p>}
 
-      {!loading && !error && (
-        <div className="comments-list">
-          {comments.length === 0 ? (
-            <p>No comments yet. Be the first to comment!</p>
-          ) : (
-            comments.map((comment) => {
-              const commentId = comment._id || comment.id;
-              return (
-                <div key={commentId} className="comment-item">
-                  {editingComment === commentId ? (
-                    <div className="edit-form">
-                      <textarea
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                        required
-                      />
-                      <div className="edit-actions">
-                        <button 
-                          onClick={() => handleUpdateComment(commentId)}
-                          disabled={!editText.trim()}
-                          className="save-btn"
-                        >
-                          Save
-                        </button>
-                        <button 
-                          onClick={() => {
-                            setEditingComment(null);
-                            setEditText('');
-                          }}
-                          className="cancel-btn"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <p>{comment.content}</p>
-                      <div className="comment-actions">
-                        <button 
-                          onClick={() => {
-                            setEditingComment(commentId);
-                            setEditText(comment.content);
-                          }}
-                          className="edit-btn"
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={() => handleDeleteComment(commentId)}
-                          className="delete-btn"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </>
-                  )}
+      <div className="comments-list">
+        {comments.map((comment) => {
+          const id = comment._id;
+          return (
+            <div key={id} className="comment-item">
+              {editingComment === id ? (
+                <div className="edit-form">
+                  <textarea
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    required
+                  />
+                  <div className="edit-actions">
+                    <button
+                      onClick={() => handleUpdateComment(id)}
+                      className="save-btn"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingComment(null);
+                        setEditText("");
+                      }}
+                      className="cancel-btn"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
-              );
-            })
-          )}
-        </div>
-      )}
+              ) : (
+                <>
+                  <p>{comment.content}</p>
+                  <div className="comment-actions">
+                    <button
+                      onClick={() => {
+                        setEditingComment(id);
+                        setEditText(comment.content);
+                      }}
+                      className="edit-btn"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(id)}
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
-export default Comments; 
+export default Comments;

@@ -16,7 +16,7 @@ public class CommentService {
 
     // Create a new comment
     public Comment createComment(Comment comment) {
-        //comment.setCreatedAt(LocalDateTime.now());
+        // comment.setCreatedAt(LocalDateTime.now());
         comment.setUpdatedAt(LocalDateTime.now());
         return commentRepository.save(comment);
     }
@@ -47,4 +47,4 @@ public class CommentService {
     public void deleteComment(String id) {
         commentRepository.deleteById(id);
     }
-} 
+}

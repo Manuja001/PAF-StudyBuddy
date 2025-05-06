@@ -27,10 +27,9 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserResponse registerUser(UserRequest request) {
-        // Implement the logic to register a user
 
         User newUser = convertToUser(request);
-        // Save the user to the database
+
         userRepository.save(newUser);
 
         return convertToUserResponse(newUser);
@@ -58,7 +57,11 @@ public class UserServiceImp implements UserService {
         user.setLastName(request.getLastName());
         user.setEnabled(request.isEnabled());
         user.setRole(request.getRole());
+        user.setEmail(request.getEmail());
         user.setProfilePictureUrl(request.getProfilePictureUrl());
+        user.setBio(request.getBio());
+        user.setFollowers(request.getFollowers());
+        user.setFollowing(request.getFollowing());
         userRepository.save(user);
         return convertToUserResponse(user);
     }
@@ -80,6 +83,9 @@ public class UserServiceImp implements UserService {
                 .role(request.getRole())
                 .profilePictureUrl(request.getProfilePictureUrl())
                 .createdAt(request.getCreatedAt())
+                .bio(request.getBio())
+                .followers(request.getFollowers())
+                .following(request.getFollowing())
                 .build();
 
     }
@@ -95,7 +101,28 @@ public class UserServiceImp implements UserService {
                 .role(user.getRole())
                 .profilePictureUrl(user.getProfilePictureUrl())
                 .createdAt(user.getCreatedAt())
+                .bio(user.getBio())
+                .followers(user.getFollowers())
+                .following(user.getFollowing())
                 .build();
+    }
+
+    public User saveOAuth2User(String email, String firstName, String lastName, String profilePictureUrl) {
+        User user = userRepository.findByEmail(email).orElseGet(() -> User.builder()
+                .email(email)
+                .firstName(firstName)
+                .lastName(lastName)
+                .profilePictureUrl(profilePictureUrl)
+                .enabled(true)
+                .role("user") // Default role
+                .build());
+
+        // Update details if changed
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setProfilePictureUrl(profilePictureUrl);
+
+        return userRepository.save(user);
     }
 
 }

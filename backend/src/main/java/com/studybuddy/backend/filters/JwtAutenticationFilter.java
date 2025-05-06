@@ -15,6 +15,7 @@ import com.studybuddy.backend.utils.jwtUtils;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -28,7 +29,8 @@ public class JwtAutenticationFilter extends OncePerRequestFilter {
     ApplicationContext applicationContext;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
             throws jakarta.servlet.ServletException, java.io.IOException {
 
         final String authHeader = request.getHeader("Authorization");
@@ -49,6 +51,12 @@ public class JwtAutenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+        return request.getServletPath().equals("/api/login")
+                || request.getServletPath().equals("/api/register");
     }
 
 }

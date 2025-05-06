@@ -213,7 +213,13 @@ function Profile() {
 
         {/* Follow Button */}
         <div className="text-center mb-6">
-          <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition">
+          <button
+            className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+            // navigate to /chatbot  on click
+            onClick={() => {
+              window.location.href = "/chatBot";
+            }}
+          >
             Chat Bot
           </button>
         </div>

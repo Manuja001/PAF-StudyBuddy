@@ -12,6 +12,18 @@ axios.interceptors.request.use(
     // Retrieve the token from localStorage
     const token = localStorage.getItem("token");
 
+    // If the request is to the login endpoint, do not check for the token
+    if (config.url === "/login") {
+      delete config.headers["Authorization"];
+      return config;
+    }
+
+    // If the request is to the signup endpoint, do not include the token
+    if (config.url === "/signup") {
+      delete config.headers["Authorization"];
+      return config;
+    }
+
     // If a token exists, add it to the Authorization header
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;

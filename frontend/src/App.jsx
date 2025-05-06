@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
 import Admin from "./components/Admin";
+import ChatBot from "./components/ChatBot";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/HomePage" element={<HomePage />} />
         <Route path="/Profile/:id" element={<Profile />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/chatBot" element={<ChatBot />} />
       </Routes>
     </BrowserRouter>
   );

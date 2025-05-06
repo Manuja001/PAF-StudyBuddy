@@ -1,0 +1,71 @@
+.create-post-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-post-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .create-post-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .create-post-form label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    color: #333;
+  }
+  
+  .create-post-form input,
+  .create-post-form select,
+  .create-post-form textarea {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    outline: none;
+    transition: border 0.3s ease;
+  }
+  
+  .create-post-form input:focus,
+  .create-post-form select:focus,
+  .create-post-form textarea:focus {
+    border-color: #007bff;
+  }
+  
+  .create-post-form button {
+    margin-top: 25px;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-post-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: #d9534f;
+    background-color: #f8d7da;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+  }
+  

@@ -37,6 +37,11 @@ public class AppUserDetailsService implements UserDetailsService {
         );
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
     // Need to check again if this is correct
     // This method converts the role string to a collection of GrantedAuthority
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {

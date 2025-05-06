@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.studybuddy.backend.io.AuthRequest;
 import com.studybuddy.backend.io.AuthResponse;
+import com.studybuddy.backend.model.User;
 import com.studybuddy.backend.service.AppUserDetailsService;
 import com.studybuddy.backend.utils.jwtUtils;
 
@@ -32,8 +33,9 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
         final UserDetails userdetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
         final String jwtToken = jwtUtils.generateToken(userdetails);
+        final User user = userDetailsService.findByEmail(authRequest.getEmail());
 
-        return new AuthResponse(authRequest.getEmail(), jwtToken);
+        return new AuthResponse(authRequest.getEmail(), jwtToken, user.getId(), user.getRole());
     }
 
 }

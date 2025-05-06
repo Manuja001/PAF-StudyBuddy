@@ -7,7 +7,7 @@ import password from "../assets/password.png";
 import user from "../assets/user.png";
 import showPasswordIcon from "../assets/showPassword.png";
 import hidePasswordIcon from "../assets/hidePassword.png";
-import axios from "axios";
+import axios from "../config/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -40,16 +40,18 @@ function Register() {
       return;
     }
     console.log(formData);
-    const dataToSubmit = { ...formData, role: "User" };
+    const dataToSubmit = {
+      ...formData,
+      role: "User",
+      bio: "Hi I am " + formData.firstName + " " + formData.lastName,
+    };
     console.log("formDate: ", dataToSubmit);
 
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/register",
-        dataToSubmit
-      );
+      console.log(dataToSubmit);
+      const response = await axios.post("/api/register", dataToSubmit);
       if (response.status === 200) {
         toast.success("Registration successful!");
         //redirect to login or home page
@@ -196,11 +198,23 @@ function Register() {
             </p>
             <div className="flex justify-center">
               <button
-                className="bg-slate-500 text-white uppercase text-lg font-semibold px-5 py-3 rounded-3xl mt-5 hover:scale-[1.02] ease-in-out active:scale-[0.98]"
                 type="submit"
+                className="bg-slate-500 text-white uppercase text-lg font-semibold px-5 py-3 rounded-3xl mt-7 hover:scale-[1.02] ease-in-out active:scale-[0.98]"
                 disabled={loading}
               >
                 {loading ? "Loading..." : "Register"}
+              </button>
+            </div>
+            <div className="flex items-center justify-center mt-5">
+              <button
+                type="button"
+                onClick={() =>
+                  (window.location.href =
+                    "http://localhost:8080/oauth2/authorization/google")
+                }
+                className="text-sm uppercase border-2 px-4 py-2 text-slate-800 border-slate-300 rounded-xl hover:scale-[1.02] ease-in-out active:scale-[0.98]"
+              >
+                Continue with Google
               </button>
             </div>
           </form>

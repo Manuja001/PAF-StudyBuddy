@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../config/axios';
 import './CreatePost.css';
@@ -12,22 +12,51 @@ const CreatePost = () => {
     skillLevel: '',
     category: ''
   });
+
+  const [showOtherCategory, setShowOtherCategory] = useState(false);
+  const [otherCategory, setOtherCategory] = useState('');
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'category') {
+      if (value === 'Other') {
+        setShowOtherCategory(true);
+        setPost((prevPost) => ({
+          ...prevPost,
+          category: '', // temporarily clear category
+        }));
+      } else {
+        setShowOtherCategory(false);
+        setPost((prevPost) => ({
+          ...prevPost,
+          category: value,
+        }));
+      }
+    } else {
+      setPost((prevPost) => ({
+        ...prevPost,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleOtherCategoryChange = (e) => {
+    const value = e.target.value;
+    setOtherCategory(value);
     setPost((prevPost) => ({
       ...prevPost,
-      [name]: value,
+      category: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/posts', post);
+      await axios.post('/api/posts', post);
       navigate('/posts');
-    } catch (err) {
+    } catch {
       setError('Failed to create the post');
     }
   };
@@ -72,7 +101,7 @@ const CreatePost = () => {
         <label>Category:</label>
         <select
           name="category"
-          value={post.category}
+          value={showOtherCategory ? 'Other' : post.category}
           onChange={handleChange}
           required
         >
@@ -80,7 +109,21 @@ const CreatePost = () => {
           <option value="Programming">Programming</option>
           <option value="Mathematics">Mathematics</option>
           <option value="Design">Design</option>
+          <option value="Other">Other</option>
         </select>
+
+        {showOtherCategory && (
+          <>
+            <label>Other Category:</label>
+            <input
+              type="text"
+              value={otherCategory}
+              onChange={handleOtherCategoryChange}
+              placeholder="Enter your category"
+              required
+            />
+          </>
+        )}
 
         <button type="submit">Submit</button>
       </form>

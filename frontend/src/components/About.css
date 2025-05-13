@@ -1,0 +1,157 @@
+.about-section {
+  padding: 120px 0;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.about-content {
+  max-width: 600px;
+}
+
+.about-subtitle {
+  font-size: 18px;
+  color: #fb5e2e;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.about-title {
+  font-size: 48px;
+  color: #111827;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  font-family: 'Barbus Neue', sans-serif;
+}
+
+.about-description {
+  font-size: 18px;
+  color: #4B5563;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.stat-item {
+  text-align: left;
+}
+
+.stat-number {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fb5e2e;
+  margin-bottom: 8px;
+  font-family: 'Barbus Neue', sans-serif;
+}
+
+.stat-label {
+  font-size: 16px;
+  color: #4B5563;
+  font-weight: 500;
+}
+
+.about-image {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
+}
+
+.about-image:hover img {
+  transform: scale(1.02);
+}
+
+.about-image::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: -20px;
+  bottom: -20px;
+  border: 2px solid #fb5e2e;
+  border-radius: 20px;
+  z-index: -1;
+}
+
+.highlight {
+  color: #fb5e2e;
+}
+
+@media (max-width: 1024px) {
+  .about-section {
+    padding: 100px 0;
+  }
+
+  .about-title {
+    font-size: 40px;
+  }
+
+  .stat-number {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about-content {
+    max-width: 100%;
+  }
+
+  .about-image {
+    order: -1;
+  }
+
+  .about-title {
+    font-size: 36px;
+  }
+
+  .about-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .about-section {
+    padding: 80px 0;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+} 

@@ -33,10 +33,9 @@ const Features = () => {
   ];
 
   return (
-    <section className="features-section">
+    <section id="features" className="features-section">
       <div className="features-container">
         <div className="features-header">
-         
           <h2 className="features-title">Empowering Your Learning Journey</h2>
           <p className="features-description">
             Discover powerful tools and features designed to enhance your educational experience and help you achieve your academic goals.

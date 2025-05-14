@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Contact from "./components/Contact";
 import CreateStudyPlan from "./components/CreateStudyPlan";
 import ViewStudyPlan from "./components/ViewStudyPlan";
+import StudyPlanList from "./components/StudyPlanList";
 
 function HomePage() {
   return (
@@ -27,7 +28,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/study-plan" element={<CreateStudyPlan />} />
-          <Route path="/view-study-plan" element={<ViewStudyPlan />} />
+          <Route path="/view-study-plan" element={<StudyPlanList />} />
+          <Route path="/view-study-plan/:id" element={<ViewStudyPlan />} />
         </Routes>
       </div>
     </Router>

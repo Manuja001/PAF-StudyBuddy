@@ -1,0 +1,179 @@
+{
+  "title": "Adobe Premiere Pro Video Editing Mastery",
+  "description": "A comprehensive study plan to master video editing with Adobe Premiere Pro, from basics to advanced techniques.",
+  "sessions": [
+    {
+      "name": "Session 1: Getting Started & Interface Basics",
+      "chapters": [
+        {
+          "title": "Introduction to Premiere Pro",
+          "description": "Understanding the interface and basic setup",
+          "todos": [
+            {
+              "text": "Learn about the Premiere Pro workspace layout",
+              "completed": false
+            },
+            {
+              "text": "Set up a new project with proper settings",
+              "completed": false
+            },
+            {
+              "text": "Import and organize media files",
+              "completed": false
+            },
+            {
+              "text": "Understand different panels (Timeline, Source, Program)",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "Adobe Premiere Pro User Guide",
+              "url": "https://helpx.adobe.com/premiere-pro/user-guide.html"
+            },
+            {
+              "title": "Premiere Pro Essential Training on LinkedIn Learning",
+              "url": "https://www.linkedin.com/learning/premiere-pro-2022-essential-training"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Session 2: Basic Editing Techniques",
+      "chapters": [
+        {
+          "title": "Essential Editing Tools",
+          "description": "Learning fundamental editing tools and techniques",
+          "todos": [
+            {
+              "text": "Master the Selection Tool (V)",
+              "completed": false
+            },
+            {
+              "text": "Practice using Ripple (B) and Rolling (N) Edit tools",
+              "completed": false
+            },
+            {
+              "text": "Learn basic timeline operations",
+              "completed": false
+            },
+            {
+              "text": "Understand different track types (Video vs Audio)",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "Adobe Premiere Pro Editing Tools Guide",
+              "url": "https://helpx.adobe.com/premiere-pro/using/editing-tools.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Session 3: Audio and Transitions",
+      "chapters": [
+        {
+          "title": "Audio Editing & Transitions",
+          "description": "Working with audio and adding professional transitions",
+          "todos": [
+            {
+              "text": "Learn audio mixing basics",
+              "completed": false
+            },
+            {
+              "text": "Apply and customize audio transitions",
+              "completed": false
+            },
+            {
+              "text": "Master video transitions (Cross Dissolve, Wipes)",
+              "completed": false
+            },
+            {
+              "text": "Practice keyframing audio levels",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "Audio Editing in Premiere Pro",
+              "url": "https://helpx.adobe.com/premiere-pro/using/audio.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Session 4: Color Correction & Effects",
+      "chapters": [
+        {
+          "title": "Color Grading Fundamentals",
+          "description": "Understanding color correction and effects",
+          "todos": [
+            {
+              "text": "Learn Lumetri Color panel basics",
+              "completed": false
+            },
+            {
+              "text": "Practice basic color correction",
+              "completed": false
+            },
+            {
+              "text": "Apply and customize video effects",
+              "completed": false
+            },
+            {
+              "text": "Create and save effect presets",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "Color Workflows Guide",
+              "url": "https://helpx.adobe.com/premiere-pro/using/color-workflows.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Session 5: Advanced Techniques & Export",
+      "chapters": [
+        {
+          "title": "Advanced Editing & Export",
+          "description": "Learning advanced techniques and export settings",
+          "todos": [
+            {
+              "text": "Master nested sequences",
+              "completed": false
+            },
+            {
+              "text": "Learn multi-camera editing",
+              "completed": false
+            },
+            {
+              "text": "Understand export settings and formats",
+              "completed": false
+            },
+            {
+              "text": "Practice using Adobe Media Encoder",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "Export Guide for Premiere Pro",
+              "url": "https://helpx.adobe.com/premiere-pro/using/export-settings-reference.html"
+            },
+            {
+              "title": "Advanced Editing Techniques",
+              "url": "https://helpx.adobe.com/premiere-pro/using/advanced-editing.html"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+} 

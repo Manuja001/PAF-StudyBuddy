@@ -9,6 +9,24 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMenuOpen(false);
+    }
+  };
+
+  const handleNavClick = (e, sectionId) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      // If not on home page, navigate to home and then scroll
+      window.location.href = `/#${sectionId}`;
+    } else {
+      scrollToSection(sectionId);
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -33,10 +51,18 @@ const Navbar = () => {
               <Link to="/" className={`nav-item ${isActive('/') ? 'nav-item-active' : 'nav-item-default'}`}>Home</Link>
             </li>
             <li>
-              <Link to="/#features" className="nav-item nav-item-default">Features</Link>
+              <a href="#features" 
+                 onClick={(e) => handleNavClick(e, 'features')} 
+                 className="nav-item nav-item-default">
+                Features
+              </a>
             </li>
             <li>
-              <Link to="/#about" className="nav-item nav-item-default">About</Link>
+              <a href="#about" 
+                 onClick={(e) => handleNavClick(e, 'about')} 
+                 className="nav-item nav-item-default">
+                About
+              </a>
             </li>
             <li>
               <Link to="/study-plan" className={`nav-item ${isActive('/study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>Create Study Plan</Link>
@@ -45,7 +71,11 @@ const Navbar = () => {
               <Link to="/view-study-plan" className={`nav-item ${isActive('/view-study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>View Study Plan</Link>
             </li>
             <li>
-              <Link to="/#contact" className="nav-item nav-item-default">Contact</Link>
+              <a href="#contact" 
+                 onClick={(e) => handleNavClick(e, 'contact')} 
+                 className="nav-item nav-item-default">
+                Contact
+              </a>
             </li>
             <li>
               <Link to="/signup" className="nav-button">Sign Up</Link>

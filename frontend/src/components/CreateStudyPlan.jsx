@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { FiPlus, FiUpload, FiLink, FiChevronDown, FiChevronUp, FiTrash2, FiCheck } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import './CreateStudyPlan.css';
 
 const CreateStudyPlan = () => {
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [studyPlan, setStudyPlan] = useState({
     name: '',
     timePeriod: '',
@@ -114,10 +117,96 @@ const CreateStudyPlan = () => {
     setStudyPlan({ ...studyPlan, sessions: updatedSessions });
   };
 
-  const handleSubmit = (e) => {
+  const transformDataForBackend = () => {
+    const formData = new FormData();
+    
+    // Transform the study plan data
+    const studyPlanData = {
+      title: studyPlan.name,
+      description: studyPlan.description,
+      sessions: studyPlan.sessions.map(session => ({
+        name: session.name,
+        chapters: session.chapters.map(chapter => ({
+          title: chapter.name,
+          description: '', // You might want to add a description field to your form
+          todos: chapter.todos.map(todo => ({
+            text: todo.text,
+            completed: todo.completed
+          })),
+          resources: chapter.resources.map(resource => ({
+            title: resource.url, // You might want to add a title field to your form
+            url: resource.url
+          }))
+        }))
+      }))
+    };
+
+    // Add the study plan data as a JSON string
+    formData.append('studyPlan', JSON.stringify(studyPlanData));
+    
+    // Add the image if it exists
+    if (studyPlan.image) {
+      formData.append('image', studyPlan.image);
+    }
+
+    return formData;
+  };
+
+  const testBackendConnection = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/test');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const text = await response.text();
+      console.log('Backend connection test:', text);
+      return true;
+    } catch (error) {
+      console.error('Backend connection test failed:', error);
+      return false;
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log(studyPlan);
+    if (isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+
+      // Test connection first
+      const isConnected = await testBackendConnection();
+      if (!isConnected) {
+        throw new Error('Cannot connect to backend server. Please make sure it is running.');
+      }
+
+      const formData = transformDataForBackend();
+      
+      const response = await fetch('http://localhost:8080/api/study-plans', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server response:', errorText);
+        throw new Error(`Failed to create study plan: ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log('Study plan created:', result);
+      
+      // Navigate to the view page
+      navigate('/view-study-plan');
+    } catch (error) {
+      console.error('Error creating study plan:', error);
+      alert(error.message || 'Failed to create study plan. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -334,8 +423,12 @@ const CreateStudyPlan = () => {
           </button>
         </div>
 
-        <button type="submit" className="save-button">
-          <FiCheck /> Save Study Plan
+        <button 
+          type="submit" 
+          className="save-button" 
+          disabled={isSubmitting}
+        >
+          <FiCheck /> {isSubmitting ? 'Saving...' : 'Save Study Plan'}
         </button>
       </form>
     </div>

@@ -1,71 +1,103 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FiTrash2 } from 'react-icons/fi';
 import './ViewStudyPlan.css';
 
 const ViewStudyPlan = () => {
-  const studyPlan = {
-    title: "Web Development Fundamentals",
-    description: "A comprehensive study plan to master the basics of web development",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
-    sessions: [
-      {
-        name: "HTML & CSS Basics",
-        chapters: [
-          {
-            title: "Introduction to HTML",
-            description: "Learn the fundamentals of HTML structure and basic elements",
-            todos: [
-              { text: "Study HTML document structure", completed: false },
-              { text: "Practice with semantic elements", completed: true },
-              { text: "Complete coding exercises", completed: false }
-            ],
-            resources: [
-              { title: "MDN HTML Guide", url: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
-              { title: "W3Schools HTML Tutorial", url: "https://www.w3schools.com/html/" }
-            ]
-          },
-          {
-            title: "CSS Fundamentals",
-            description: "Master CSS styling and layout techniques",
-            todos: [
-              { text: "Learn CSS selectors", completed: true },
-              { text: "Study CSS Box Model", completed: false },
-              { text: "Practice Flexbox layouts", completed: false }
-            ],
-            resources: [
-              { title: "CSS Tricks", url: "https://css-tricks.com" },
-              { title: "Flexbox Froggy", url: "https://flexboxfroggy.com" }
-            ]
-          }
-        ]
-      },
-      {
-        name: "JavaScript Essentials",
-        chapters: [
-          {
-            title: "JavaScript Basics",
-            description: "Understanding JavaScript fundamentals and syntax",
-            todos: [
-              { text: "Study variables and data types", completed: true },
-              { text: "Learn control structures", completed: false },
-              { text: "Practice functions", completed: false }
-            ],
-            resources: [
-              { title: "JavaScript.info", url: "https://javascript.info" },
-              { title: "Eloquent JavaScript", url: "https://eloquentjavascript.net" }
-            ]
-          }
-        ]
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [studyPlan, setStudyPlan] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchStudyPlan();
+  }, [id]);
+
+  const fetchStudyPlan = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/study-plans/${id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch study plan');
       }
-    ]
+      const data = await response.json();
+      setStudyPlan(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching study plan:', error);
+      setError('Failed to load study plan. Please try again later.');
+      setLoading(false);
+    }
   };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this study plan?')) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/study-plans/${id}`, {
+          method: 'DELETE',
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to delete study plan');
+        }
+        
+        // Navigate back to the study plans list
+        navigate('/view-study-plan');
+      } catch (error) {
+        console.error('Error deleting study plan:', error);
+        alert('Failed to delete study plan. Please try again.');
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="view-study-plan">
+        <div className="study-plan-container">
+          <div className="loading">Loading study plan...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !studyPlan) {
+    return (
+      <div className="view-study-plan">
+        <div className="study-plan-container">
+          <div className="error">{error || 'Study plan not found'}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="view-study-plan">
       <div className="study-plan-container">
         <div className="study-plan-header">
-          <img src={studyPlan.image} alt="Study Plan Cover" className="cover-image" />
-          <h1>{studyPlan.title}</h1>
-          <p className="description">{studyPlan.description}</p>
+          {studyPlan.imageUrl && (
+            <img 
+              src={`http://localhost:8080${studyPlan.imageUrl}`} 
+              alt="Study Plan Cover" 
+              className="cover-image"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://via.placeholder.com/1200x300?text=No+Image';
+              }}
+            />
+          )}
+          <div className="header-content">
+            <div className="title-section">
+              <h1>{studyPlan.title}</h1>
+              <button 
+                className="delete-button"
+                onClick={handleDelete}
+                aria-label="Delete study plan"
+              >
+                <FiTrash2 />
+              </button>
+            </div>
+            <p className="description">{studyPlan.description}</p>
+          </div>
         </div>
 
         <div className="sessions">

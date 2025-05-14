@@ -45,6 +45,7 @@ const Comments = () => {
     message: "",
     onConfirm: null,
   });
+  const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
     if (postId) fetchComments();
@@ -67,6 +68,7 @@ const Comments = () => {
       const formatted = data.map((c) => ({
         ...c,
         _id: c._id || c.id || crypto.randomUUID(),
+        createdAt: c.createdAt || new Date().toISOString(),
       }));
       setComments(formatted);
     } catch (err) {
@@ -81,7 +83,6 @@ const Comments = () => {
     e.preventDefault();
     if (!newComment.trim() || submitting) return;
     try {
-      console.log("Adding comment:", newComment);
       setSubmitting(true);
       const response = await axios.post(`/api/posts/${postId}/comments`, {
         content: newComment,
@@ -89,6 +90,7 @@ const Comments = () => {
       const created = {
         ...response.data,
         _id: response.data._id || response.data.id || crypto.randomUUID(),
+        createdAt: response.data.createdAt || new Date().toISOString(),
       };
       setComments([created, ...comments]);
       setNewComment("");
@@ -156,6 +158,21 @@ const Comments = () => {
     });
   };
 
+  const toggleSortOrder = () => {
+    const sortIcon = document.querySelector('.sort-icon');
+    if (sortIcon) {
+      sortIcon.classList.add('changing');
+      setTimeout(() => sortIcon.classList.remove('changing'), 600);
+    }
+    setSortOrder(sortOrder === "newest" ? "oldest" : "newest");
+  };
+
+  const sortedComments = [...comments].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
   if (!postId) return <div className="error">Post ID missing.</div>;
 
   return (
@@ -190,11 +207,29 @@ const Comments = () => {
         </button>
       </form>
 
+      <div className="sort-section">
+        <button onClick={toggleSortOrder} className="sort-btn">
+          <span className="sort-icon">
+            {sortOrder === "newest" ? (
+              <svg className="sort-arrow" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z" />
+              </svg>
+            ) : (
+              <svg className="sort-arrow" viewBox="0 0 24 24">
+                <path d="M7 14l5-5 5 5z" />
+              </svg>
+            )}
+          </span>
+          {sortOrder === "newest" ? "Newest First" : "Oldest First"}
+          <span className="sort-effect"></span>
+        </button>
+      </div>
+
       {loading && <div className="loading">Loading...</div>}
       {!loading && comments.length === 0 && <p>No comments yet.</p>}
 
       <div className="comments-list">
-        {comments.map((comment) => {
+        {sortedComments.map((comment) => {
           const id = comment._id;
           return (
             <div key={id} className="comment-item">
@@ -226,22 +261,27 @@ const Comments = () => {
               ) : (
                 <>
                   <p>{comment.content}</p>
-                  <div className="comment-actions">
-                    <button
-                      onClick={() => {
-                        setEditingComment(id);
-                        setEditText(comment.content);
-                      }}
-                      className="edit-btn"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteComment(id)}
-                      className="delete-btn"
-                    >
-                      Delete
-                    </button>
+                  <div className="comment-meta">
+                    <span className="comment-date">
+                      {new Date(comment.createdAt).toLocaleString()}
+                    </span>
+                    <div className="comment-actions">
+                      <button
+                        onClick={() => {
+                          setEditingComment(id);
+                          setEditText(comment.content);
+                        }}
+                        className="edit-btn"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteComment(id)}
+                        className="delete-btn"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </>
               )}

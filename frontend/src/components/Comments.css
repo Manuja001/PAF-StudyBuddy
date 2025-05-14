@@ -1,354 +1,487 @@
+/* Comments container */
 .comments-container {
-    max-width: 800px;
-    margin: 0 auto;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background: linear-gradient(to right, #fefcea, #f1da36);
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Heading */
+.comments-container h2 {
+  margin-bottom: 24px;
+  color: #2d2d2d;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #444;
+  font-style: italic;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+}
+
+/* Error message */
+.error {
+  text-align: center;
+  padding: 16px;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 16px;
+}
+
+/* Form to add comment */
+.comment-form {
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 12px;
+  transition: border-color 0.3s;
+}
+
+.comment-form textarea:focus {
+  border-color: #ff9500;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.2);
+}
+
+.comment-form button {
+  background-color: #007bff;
+  color: white;
+  padding: 14px 28px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.comment-form button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment-form button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.comment-form button.submitting {
+  position: relative;
+  padding-right: 40px;
+}
+
+.comment-form button.submitting::after {
+  content: "";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Sort section */
+.sort-section {
+  display: flex;
+  justify-content: flex-end;
+  margin: 15px 0 25px;
+}
+
+.sort-btn {
+  position: relative;
+  background: linear-gradient(135deg, #ff9500, #ff5e00);
+  color: white;
+  padding: 12px 24px 12px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+}
+
+.sort-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
+}
+
+.sort-btn:active {
+  transform: translateY(0);
+}
+
+.sort-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.sort-btn:hover .sort-icon {
+  transform: scale(1.1);
+}
+
+.sort-arrow {
+  width: 18px;
+  height: 18px;
+  fill: white;
+  transition: all 0.3s ease;
+}
+
+.sort-effect {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+  width: 30px;
+  height: 100%;
+  left: -40px;
+  top: 0;
+  transform: skewX(-15deg);
+  transition: all 0.6s ease;
+}
+
+.sort-btn:hover .sort-effect {
+  left: 120%;
+}
+
+/* Animation for sort direction change */
+@keyframes spin-sort {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.sort-icon.changing {
+  animation: spin-sort 0.6s ease;
+}
+
+/* Comments list */
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Each comment item */
+.comment-item {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  border-left: 5px solid #ff9500;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comment-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.comment-item p {
+  font-size: 18px;
+  color: #333;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+/* Comment metadata */
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #eee;
+}
+
+.comment-date {
+  font-size: 14px;
+  color: #777;
+  font-style: italic;
+}
+
+/* Actions: Edit / Delete */
+.comment-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.comment-actions button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.comment-actions .edit-btn {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.comment-actions .edit-btn:hover {
+  background-color: #117a8b;
+  transform: translateY(-1px);
+}
+
+.comment-actions .delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.comment-actions .delete-btn:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+/* Edit form */
+.edit-form {
+  margin-top: 10px;
+}
+
+.edit-form textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  transition: border-color 0.3s;
+}
+
+.edit-form textarea:focus {
+  border-color: #17a2b8;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.edit-actions button {
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-actions .save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.edit-actions .save-btn:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.edit-actions .cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.edit-actions .cancel-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+/* Confirmation Dialog */
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.confirm-dialog {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(0.9);
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  to {
+    transform: scale(1);
+  }
+}
+
+.confirm-dialog p {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.confirm-actions button {
+  padding: 10px 22px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirm-actions .confirm-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.confirm-actions .confirm-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.confirm-actions .cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.confirm-actions .cancel-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+/* Toast / Message */
+.message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 16px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 2000;
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.message::before {
+  content: "✓";
+  font-size: 18px;
+}
+
+.message.error {
+  background-color: #dc3545;
+}
+
+.message.error::before {
+  content: "⚠";
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .comments-container {
     padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
+    margin: 20px auto;
   }
-  
-  .comments-container h2 {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 1.5rem;
-  }
-  
-  .loading {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-    font-style: italic;
-  }
-  
-  .error {
-    text-align: center;
-    padding: 15px;
-    color: #dc3545;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 4px;
-    margin: 10px 0;
-  }
-  
+
   .comment-form {
-    margin-bottom: 30px;
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 16px;
   }
-  
-  .comment-form textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 12px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-    font-size: 14px;
-  }
-  
-  .comment-form button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .comment-form button:hover {
-    background-color: #218838;
-  }
-  
-  .comment-form button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-  
-  .comments-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .comment-item {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #eee;
-    margin-bottom: 15px;
-  }
-  
-  .comment-item p {
-    margin: 0 0 15px 0;
-    color: #333;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  
-  .comment-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
-  
-  .comment-actions button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background-color 0.2s;
-  }
-  
-  .comment-actions button:first-child {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .comment-actions button:last-child {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .comment-actions button:hover {
-    opacity: 0.9;
-  }
-  
-  .edit-form {
-    margin-top: 10px;
-  }
-  
-  .edit-form textarea {
-    width: 100%;
-    min-height: 80px;
-    padding: 12px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-    font-size: 14px;
-  }
-  
-  .edit-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
-  
-  .edit-actions button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-  }
-  
-  .edit-actions button:first-child {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .edit-actions button:last-child {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .edit-actions button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-  
-  /* Message popup styles */
-  .message {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 25px;
-    border-radius: 4px;
-    color: white;
-    font-weight: 500;
-    animation: slideIn 0.3s ease-out;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .message.success {
-    background-color: #28a745;
-  }
-  
-  .message.error {
-    background-color: #dc3545;
-  }
-  
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  /* Button styles */
-  .edit-btn {
-    background-color: #007bff !important;
-    color: white;
-    transition: background-color 0.2s !important;
-  }
-  
-  .edit-btn:hover {
-    background-color: #0056b3 !important;
-  }
-  
-  .delete-btn {
-    background-color: #dc3545 !important;
-    color: white;
-    transition: background-color 0.2s !important;
-  }
-  
-  .delete-btn:hover {
-    background-color: #c82333 !important;
-  }
-  
-  .save-btn {
-    background-color: #28a745 !important;
-    color: white;
-    transition: background-color 0.2s !important;
-  }
-  
-  .save-btn:hover {
-    background-color: #218838 !important;
-  }
-  
-  .cancel-btn {
-    background-color: #6c757d !important;
-    color: white;
-    transition: background-color 0.2s !important;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #5a6268 !important;
-  }
-  
-  button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed !important;
-  }
-  
-  .submitting {
-    position: relative;
-    pointer-events: none;
-  }
-  
-  .submitting:after {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    top: 50%;
-    left: 50%;
-    margin-top: -8px;
-    margin-left: -8px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 0.8s infinite linear;
-  }
-  
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  /* Confirmation Dialog Styles */
-  .confirm-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
+
+  .sort-section {
     justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.2s ease-out;
   }
-  
-  .confirm-dialog {
-    background: white;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 90%;
-    animation: slideUp 0.3s ease-out;
-  }
-  
-  .confirm-dialog p {
-    margin: 0 0 20px 0;
-    font-size: 16px;
-    color: #333;
-    line-height: 1.5;
-  }
-  
-  .confirm-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-  }
-  
-  .confirm-actions button {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 4px;
+
+  .sort-btn {
+    padding: 10px 20px 10px 16px;
     font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
   }
-  
-  .confirm-actions .confirm-btn {
-    background-color: #007bff;
-    color: white;
+
+  .comment-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
-  
-  .confirm-actions .confirm-btn:hover {
-    background-color: #0056b3;
+
+  .comment-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
-  
-  .confirm-actions .cancel-btn {
-    background-color: #6c757d;
-    color: white;
+
+  .comment-item {
+    padding: 16px;
   }
-  
-  .confirm-actions .cancel-btn:hover {
-    background-color: #5a6268;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes slideUp {
-    from {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  } 
+}
+

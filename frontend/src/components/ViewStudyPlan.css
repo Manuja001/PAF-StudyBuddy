@@ -1,0 +1,173 @@
+.view-study-plan {
+  min-height: 100vh;
+  background: #000000;
+  padding: 24px;
+}
+
+.study-plan-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.study-plan-header {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.cover-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.study-plan-header h1 {
+  font-size: 32px;
+  color: #000000;
+  margin: 24px;
+  font-weight: 600;
+}
+
+.study-plan-header .description {
+  font-size: 16px;
+  color: #000000;
+  margin: 0 24px 24px;
+  line-height: 1.6;
+}
+
+.sessions {
+  padding: 0 24px 24px;
+}
+
+.session {
+  margin-bottom: 40px;
+}
+
+.session:last-child {
+  margin-bottom: 0;
+}
+
+.session-title {
+  font-size: 24px;
+  color: #000000;
+  margin-bottom: 24px;
+  font-weight: 600;
+}
+
+.chapters {
+  display: grid;
+  gap: 24px;
+}
+
+.chapter {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.chapter-title {
+  font-size: 20px;
+  color: #000000;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.chapter-description {
+  font-size: 14px;
+  color: #000000;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.todos {
+  margin-bottom: 24px;
+}
+
+.todos h4, .resources h4 {
+  font-size: 16px;
+  color: #000000;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.todo-item:last-child {
+  margin-bottom: 0;
+}
+
+.todo-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.todo-item span {
+  font-size: 14px;
+  color: #000000;
+}
+
+.todo-item span.completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.resources {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resource-link {
+  display: inline-block;
+  color: #000000;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.resource-link:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .view-study-plan {
+    padding: 16px;
+  }
+
+  .study-plan-header h1 {
+    font-size: 24px;
+    margin: 16px;
+  }
+
+  .study-plan-header .description {
+    margin: 0 16px 16px;
+  }
+
+  .sessions {
+    padding: 0 16px 16px;
+  }
+
+  .chapter {
+    padding: 16px;
+  }
+
+  .cover-image {
+    height: 200px;
+  }
+} 

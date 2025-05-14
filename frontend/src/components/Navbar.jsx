@@ -1,16 +1,20 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logoBlack from "../assets/logoblack.png";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <a href="/" className="logo-container">
+        <Link to="/" className="logo-container">
           <img src={logoBlack} className="logo" alt="StudyBuddy Logo" />
-        </a>
+        </Link>
         
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -26,19 +30,25 @@ const Navbar = () => {
         <div className={`nav-menu ${!isMenuOpen && 'hidden md:block'}`}>
           <ul className="nav-list">
             <li>
-              <a href="#" className={`nav-item nav-item-active`}>Home</a>
+              <Link to="/" className={`nav-item ${isActive('/') ? 'nav-item-active' : 'nav-item-default'}`}>Home</Link>
             </li>
             <li>
-              <a href="#" className={`nav-item nav-item-default`}>Features</a>
+              <Link to="/#features" className="nav-item nav-item-default">Features</Link>
             </li>
             <li>
-              <a href="#" className={`nav-item nav-item-default`}>About</a>
+              <Link to="/#about" className="nav-item nav-item-default">About</Link>
             </li>
             <li>
-              <a href="#" className={`nav-item nav-item-default`}>Contact</a>
+              <Link to="/study-plan" className={`nav-item ${isActive('/study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>Create Study Plan</Link>
             </li>
             <li>
-              <a href="#" className="nav-button">Sign Up</a>
+              <Link to="/view-study-plan" className={`nav-item ${isActive('/view-study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>View Study Plan</Link>
+            </li>
+            <li>
+              <Link to="/#contact" className="nav-item nav-item-default">Contact</Link>
+            </li>
+            <li>
+              <Link to="/signup" className="nav-button">Sign Up</Link>
             </li>
           </ul>
         </div>

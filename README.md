@@ -1,9 +1,5 @@
-# 📚 StudyBuddy — Your Ultimate Study Group & Exam Prep Companion
 
-![License](https://img.shields.io/github/license/your-username/studybuddy?style=for-the-badge)
-![Issues](https://img.shields.io/github/issues/your-username/studybuddy?style=for-the-badge)
-![Forks](https://img.shields.io/github/forks/your-username/studybuddy?style=for-the-badge)
-![Stars](https://img.shields.io/github/stars/your-username/studybuddy?style=for-the-badge)
+# 📚 StudyBuddy — Your Ultimate Study Group & Exam Prep Companion
 
 > A modern web app to create study groups, track progress, manage exams, and stay productive with tools like Pomodoro timers and shared notes — built with ❤️ for students.
 

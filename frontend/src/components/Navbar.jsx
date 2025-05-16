@@ -15,40 +15,85 @@ const Navbar = () => {
         <Link to="/" className="logo-container">
           <img src={logoBlack} className="logo" alt="StudyBuddy Logo" />
         </Link>
-        
+
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           type="button"
           className="menu-button"
         >
           <span className="sr-only">Open main menu</span>
-          <svg className="menu-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
+          <svg
+            className="menu-icon"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 17 14"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M1 1h15M1 7h15M1 13h15"
+            />
           </svg>
         </button>
 
-        <div className={`nav-menu ${!isMenuOpen && 'hidden md:block'}`}>
+        <div className={`nav-menu ${!isMenuOpen && "hidden md:block"}`}>
           <ul className="nav-list">
             <li>
-              <Link to="/" className={`nav-item ${isActive('/') ? 'nav-item-active' : 'nav-item-default'}`}>Home</Link>
+              <Link
+                to="/"
+                className={`nav-item ${
+                  isActive("/") ? "nav-item-active" : "nav-item-default"
+                }`}
+              >
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/#features" className="nav-item nav-item-default">Features</Link>
+              <Link to="/#features" className="nav-item nav-item-default">
+                Features
+              </Link>
             </li>
             <li>
-              <Link to="/#about" className="nav-item nav-item-default">About</Link>
+              <Link to="/#about" className="nav-item nav-item-default">
+                About
+              </Link>
             </li>
             <li>
-              <Link to="/study-plan" className={`nav-item ${isActive('/study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>Create Study Plan</Link>
+              <Link
+                to="/study-plan"
+                className={`nav-item ${
+                  isActive("/study-plan")
+                    ? "nav-item-active"
+                    : "nav-item-default"
+                }`}
+              >
+                Create Study Plan
+              </Link>
             </li>
             <li>
-              <Link to="/view-study-plan" className={`nav-item ${isActive('/view-study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>View Study Plan</Link>
+              <Link
+                to="/view-study-plan"
+                className={`nav-item ${
+                  isActive("/view-study-plan")
+                    ? "nav-item-active"
+                    : "nav-item-default"
+                }`}
+              >
+                View Study Plan
+              </Link>
             </li>
             <li>
-              <Link to="/#contact" className="nav-item nav-item-default">Contact</Link>
+              <Link to="/#contact" className="nav-item nav-item-default">
+                Contact
+              </Link>
             </li>
             <li>
-              <Link to="/signup" className="nav-button">Sign Up</Link>
+              <Link to="/register" className="nav-button">
+                Sign Up
+              </Link>
             </li>
           </ul>
         </div>
@@ -57,4 +102,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

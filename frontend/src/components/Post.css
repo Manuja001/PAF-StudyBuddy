@@ -1,0 +1,214 @@
+.post-container {
+  max-width: 1000px; /* Increased max width for larger posts */
+  margin: 3rem auto; /* Increased top margin for better spacing */
+  padding: 1rem 2rem; /* Increased padding for more space */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fef6e4, #e0f7fa);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem; /* Increased bottom margin for more space */
+  flex-wrap: wrap;
+}
+
+.back-button {
+  padding: 0.8rem 1.5rem; /* Increased padding for a bigger button */
+  background-color: #ffecd1;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem; /* Increased font size for better visibility */
+  transition: background-color 0.25s, transform 0.2s;
+}
+
+.back-button:hover {
+  background-color: #ffd54f;
+  transform: translateY(-1px);
+}
+
+.post-actions {
+  display: flex;
+  gap: 1rem; /* Increased gap for better spacing between buttons */
+  flex-wrap: wrap;
+}
+
+.edit-button,
+.delete-button,
+.save-button {
+  padding: 0.8rem 1.5rem; /* Increased padding for bigger buttons */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem; /* Increased font size for better visibility */
+  font-weight: 500;
+  transition: background-color 0.25s, transform 0.2s;
+}
+
+.edit-button {
+  background-color: #4fc3f7;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #039be5;
+  transform: translateY(-1px);
+}
+
+.delete-button {
+  background-color: #f06292;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #e91e63;
+  transform: translateY(-1px);
+}
+
+.save-button {
+  background-color: #81c784;
+  color: white;
+  width: 100%;
+  margin-top: 1.5rem; /* Increased margin-top for more space */
+}
+
+.save-button:hover {
+  background-color: #43a047;
+  transform: translateY(-1px);
+}
+
+.save-button:disabled {
+  background-color: #cfd8dc;
+  cursor: not-allowed;
+}
+
+.post-content {
+  background-color: #ffffff;
+  padding: 3rem; /* Increased padding for larger content space */
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.post-content h1 {
+  margin: 0 0 1.5rem; /* Increased margin for more space above the title */
+  font-size: 2.5rem; /* Increased font size for better visibility */
+  color: #2c3e50;
+  line-height: 1.3;
+  background: linear-gradient(90deg, #8e44ad, #3498db);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.post-content p {
+  font-size: 1.3rem; /* Increased font size for readability */
+  line-height: 1.8; /* Increased line height for better readability */
+  color: #37474f;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Increased gap for more spacing between inputs */
+  margin-top: 1.5rem; /* Increased margin-top for better spacing */
+}
+
+.edit-title,
+.edit-content {
+  font-size: 1.2rem; /* Increased font size for input fields */
+  padding: 1rem 1.2rem; /* Increased padding for input fields */
+  border: 2px solid #d1c4e9;
+  border-radius: 8px;
+  background-color: #f3e5f5;
+  transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.edit-title:focus,
+.edit-content:focus {
+  outline: none;
+  border-color: #7e57c2;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.2);
+}
+
+.message {
+  padding: 1.2rem; /* Increased padding for message box */
+  border-radius: 8px;
+  margin-bottom: 1.8rem; /* Increased margin for more space */
+  animation: slideDown 0.3s ease-out;
+  font-size: 1.1rem; /* Increased font size for readability */
+  font-weight: 500;
+}
+
+.message.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+
+.message.error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 3rem; /* Increased padding for better spacing */
+  font-size: 1.3rem; /* Increased font size */
+}
+
+.loading {
+  color: #6c757d;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+.comments-section {
+  margin-top: 3rem; /* Increased top margin */
+  padding-top: 1.5rem; /* Increased padding */
+  border-top: 2px dashed #bbb;
+  background-color: #f9fbe7;
+  border-radius: 8px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .post-container {
+    padding: 1.5rem; /* Increased padding for mobile view */
+  }
+
+  .post-content {
+    padding: 2rem; /* Increased padding */
+  }
+
+  .post-content h1 {
+    font-size: 2rem; /* Slightly smaller heading for mobile */
+  }
+
+  .edit-button,
+  .delete-button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .save-button {
+    font-size: 1.1rem; /* Increased font size for mobile */
+  }
+}

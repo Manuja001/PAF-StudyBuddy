@@ -31,7 +31,7 @@ public class jwtUtils {
                 .claims(claims)
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30))
                 .signWith(getKey())
                 .compact();
     }
@@ -76,9 +76,3 @@ public class jwtUtils {
         }
     }
 }
-// This code is a utility class for handling JWT (JSON Web Tokens) in a Spring
-// Boot application. It provides methods to generate, validate, and extract
-// information from JWTs. The class uses the JJWT library for creating and
-// parsing JWTs and includes a hardcoded secret key for signing the tokens. The
-// class is annotated with @Component, making it a Spring-managed bean that can
-// be injected into other components.

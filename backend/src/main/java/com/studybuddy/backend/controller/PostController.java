@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-//import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -31,10 +30,9 @@ public class PostController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // ✅ userId is automatically fetched from logged-in user (from JWT)
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post, Authentication authentication) {
-        String userId = authentication.getName(); // this comes from JWT 'sub'
+        String userId = authentication.getName();
         Post savedPost = postService.createPost(post, userId);
         return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
     }
@@ -51,5 +49,27 @@ public class PostController {
     public ResponseEntity<HttpStatus> deletePost(@PathVariable String id) {
         postService.deletePost(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Post> toggleLike(@PathVariable String id, Authentication authentication) {
+        String userId = authentication.getName();
+        Post updatedPost = postService.toggleLike(id, userId);
+        return updatedPost != null
+                ? new ResponseEntity<>(updatedPost, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/{id}/like-count")
+    public ResponseEntity<Integer> getLikeCount(@PathVariable String id) {
+        int count = postService.getLikeCount(id);
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/has-liked")
+    public ResponseEntity<Boolean> hasUserLiked(@PathVariable String id, Authentication authentication) {
+        String userId = authentication.getName();
+        boolean hasLiked = postService.hasUserLiked(id, userId);
+        return new ResponseEntity<>(hasLiked, HttpStatus.OK);
     }
 }

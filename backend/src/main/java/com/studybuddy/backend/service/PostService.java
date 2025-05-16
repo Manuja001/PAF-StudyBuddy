@@ -47,4 +47,25 @@ public class PostService {
     public void deletePost(String id) {
         postRepository.deleteById(id);
     }
+
+    public Post toggleLike(String postId, String userId) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            post.toggleLike(userId);
+            post.setUpdatedAt(LocalDateTime.now());
+            return postRepository.save(post);
+        }
+        return null;
+    }
+
+    public int getLikeCount(String postId) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        return postOptional.map(post -> post.getLikedBy().size()).orElse(0);
+    }
+
+    public boolean hasUserLiked(String postId, String userId) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        return postOptional.map(post -> post.getLikedBy().contains(userId)).orElse(false);
+    }
 }

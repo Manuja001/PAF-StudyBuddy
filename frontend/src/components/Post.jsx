@@ -14,34 +14,38 @@ const Post = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState({ text: "", type: "" });
+  const [likeCount, setLikeCount] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
 
   useEffect(() => {
     if (postId) {
       fetchPost();
+      fetchLikeData();
     } else {
       setError("No post ID provided");
       setLoading(false);
     }
   }, [postId]);
 
-  // Clear message after 3 seconds
-  useEffect(() => {
-    if (message.text) {
-      const timer = setTimeout(() => {
-        setMessage({ text: "", type: "" });
-      }, 3000);
-      return () => clearTimeout(timer);
+  const fetchLikeData = async () => {
+    try {
+      const [countResponse, likedResponse] = await Promise.all([
+        axios.get(`/api/posts/${postId}/like-count`),
+        axios.get(`/api/posts/${postId}/has-liked`)
+      ]);
+      setLikeCount(countResponse.data);
+      setHasLiked(likedResponse.data);
+    } catch (error) {
+      console.error("Error fetching like data:", error);
     }
-  }, [message]);
+  };
 
   const fetchPost = async () => {
     try {
       setLoading(true);
       setError(null);
-      console.log("Fetching post with ID:", postId);
       const response = await axios.get(`/api/posts/${postId}`);
-      console.log("Post response:", response.data);
-
       if (!response.data) {
         throw new Error("Post not found");
       }
@@ -50,12 +54,6 @@ const Post = () => {
       setEditedContent(response.data.content || "");
     } catch (error) {
       console.error("Error fetching post:", error);
-      console.error("Error details:", {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        message: error.message,
-      });
       setError(
         error.response?.data?.message ||
           "Failed to load post. Please try again later."
@@ -63,6 +61,24 @@ const Post = () => {
       setPost(null);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleLike = async () => {
+    try {
+      setIsLikeLoading(true);
+      const response = await axios.post(`/api/posts/${postId}/like`);
+      setPost(response.data);
+      setHasLiked(!hasLiked);
+      setLikeCount(hasLiked ? likeCount - 1 : likeCount + 1);
+    } catch (error) {
+      console.error("Error toggling like:", error);
+      setMessage({
+        text: "Failed to like post. Please try again.",
+        type: "error"
+      });
+    } finally {
+      setIsLikeLoading(false);
     }
   };
 
@@ -191,6 +207,15 @@ const Post = () => {
           <>
             <h1>{post.title}</h1>
             <p>{post.content}</p>
+            <div className="like-section">
+              <button 
+                onClick={handleLike} 
+                disabled={isLikeLoading}
+                className={`like-button ${hasLiked ? 'liked' : ''}`}
+              >
+                {hasLiked ? '❤️' : '🤍'} {likeCount}
+              </button>
+            </div>
           </>
         )}
       </div>

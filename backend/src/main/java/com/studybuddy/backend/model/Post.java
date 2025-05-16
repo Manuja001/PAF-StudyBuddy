@@ -3,7 +3,8 @@ package com.studybuddy.backend.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
-
+import java.util.HashSet;
+import java.util.Set;
 
 @Document(collection = "posts")
 public class Post {
@@ -16,6 +17,7 @@ public class Post {
     private String category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Set<String> likedBy = new HashSet<>();
 
     public Post() {
         this.createdAt = LocalDateTime.now();
@@ -86,4 +88,22 @@ public class Post {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-} 
+
+    public Set<String> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(Set<String> likedBy) {
+        this.likedBy = likedBy;
+    }
+
+    public boolean toggleLike(String userId) {
+        if (likedBy.contains(userId)) {
+            likedBy.remove(userId);
+            return false;
+        } else {
+            likedBy.add(userId);
+            return true;
+        }
+    }
+}

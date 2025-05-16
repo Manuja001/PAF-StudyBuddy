@@ -1,10 +1,10 @@
 .create-study-plan {
   min-height: 100vh;
-  background: #000000;
+  background: #ffffff;
   padding: 24px;
   display: flex;
   flex-direction: column;
-  margin-top: 70px;
+  margin-top: 60px; /* Add margin to prevent navbar overlap */
 }
 
 .study-plan-form {
@@ -12,48 +12,63 @@
   max-width: 1000px;
   margin: 0 auto;
   width: 100%;
-  background: #1a1a1a;
+  background: #ffffff;
   padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(251, 94, 46, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 h1 {
-  font-size: 32px;
-  color: #ffffff;
+  font-size: 28px;
+  color: #333333;
   margin-bottom: 32px;
-  font-family: 'Barbus Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   font-weight: 600;
   letter-spacing: -0.5px;
 }
 
 h2 {
-  font-size: 24px;
-  color: #ffffff;
-  margin-bottom: 16px;
-  font-family: 'Barbus Neue', sans-serif;
-  font-weight: 500;
+  font-size: 22px;
+  color: #333333;
+  margin-bottom: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #fb5e2e;
+  display: inline-block;
 }
 
 h4 {
   font-size: 16px;
-  color: #fb5e2e;
+  color: #333333;
   margin-bottom: 12px;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+h4::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  background: #fb5e2e;
+  margin-right: 8px;
+  border-radius: 2px;
 }
 
 .form-section {
   margin-bottom: 32px;
   padding: 24px;
-  background: #2a2a2a;
-  border-radius: 6px;
-  border: 1px solid rgba(251, 94, 46, 0.2);
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
   transition: all 0.3s ease;
 }
 
 .form-section:hover {
-  border-color: rgba(251, 94, 46, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .form-group {
@@ -68,7 +83,7 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #9CA3AF;
+  color: #4b5563;
   font-size: 14px;
 }
 
@@ -77,14 +92,14 @@ input[type="date"],
 input[type="url"],
 textarea {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid rgba(251, 94, 46, 0.2);
-  border-radius: 4px;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   font-size: 14px;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  line-height: 1.4;
+  background: #ffffff;
+  color: #4b5563;
+  line-height: 1.5;
   min-height: 40px;
 }
 
@@ -99,15 +114,14 @@ input[type="url"]:focus,
 textarea:focus {
   outline: none;
   border-color: #fb5e2e;
-  background: rgba(251, 94, 46, 0.1);
+  box-shadow: 0 0 0 3px rgba(251, 94, 46, 0.1);
 }
 
 input[type="text"]::placeholder,
 input[type="date"]::placeholder,
 input[type="url"]::placeholder,
 textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-  opacity: 0.8;
+  color: #9ca3af;
 }
 
 /* Image Upload Styles */
@@ -120,16 +134,16 @@ textarea::placeholder {
   display: block;
   width: 100%;
   min-height: 200px;
-  border: 1px dashed #000000;
-  border-radius: 4px;
+  border: 2px dashed #e5e7eb;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: #ffffff;
+  background: #f9fafb;
 }
 
 .image-upload-label:hover {
-  border-color: #000000;
-  background: #ffffff;
+  border-color: #fb5e2e;
+  background: #fef2f2;
 }
 
 .upload-placeholder {
@@ -138,21 +152,21 @@ textarea::placeholder {
   align-items: center;
   justify-content: center;
   height: 200px;
-  color: #000000;
+  color: #6b7280;
   font-size: 14px;
 }
 
 .upload-icon {
   font-size: 24px;
   margin-bottom: 12px;
-  color: #000000;
+  color: #fb5e2e;
 }
 
 .image-preview {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 12px;
 }
 
 /* Software Tags Styles */
@@ -177,17 +191,17 @@ textarea::placeholder {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #000000;
-  border-radius: 4px;
+  background: #f9fafb;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   font-size: 13px;
 }
 
 .software-tag button {
   background: none;
   border: none;
-  color: #000000;
+  color: #ef4444;
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -198,26 +212,38 @@ textarea::placeholder {
 /* Session and Chapter Styles */
 .session-card {
   background: #ffffff;
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
-  border: 1px solid #000000;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.session-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .session-name-input {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   margin-bottom: 20px;
-  color: #000000;
+  color: #333333;
   width: 100%;
+  border-color: #e5e7eb;
 }
 
 .chapter-card {
   background: #ffffff;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 16px;
   overflow: hidden;
-  border: 1px solid #000000;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.chapter-card:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .chapter-header {
@@ -226,18 +252,20 @@ textarea::placeholder {
   align-items: center;
   padding: 12px 16px;
   cursor: pointer;
-  background: #ffffff;
-  border-bottom: 1px solid #000000;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .chapter-header input {
   flex: 1;
   margin-right: 12px;
-  font-size: 14px;
-  color: #000000;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
   border: none;
   padding: 0;
   min-height: auto;
+  background: transparent;
 }
 
 .chapter-header input:focus {
@@ -254,6 +282,9 @@ textarea::placeholder {
 .todo-section,
 .resources-section {
   margin-bottom: 24px;
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
 }
 
 .todo-section:last-child,
@@ -263,100 +294,113 @@ textarea::placeholder {
 
 .todo-item {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .todo-item:last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .todo-item input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  border-radius: 3px;
-  border: 1.5px solid #000000;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
   cursor: pointer;
-  accent-color: #000000;
+  margin-top: 2px;
+  accent-color: #fb5e2e;
 }
 
 .todo-item input[type="text"] {
   flex: 1;
-  min-height: 36px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #4b5563;
 }
 
 /* Resource Links Styles */
 .resource-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .resource-item:last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .resource-icon {
-  color: #000000;
-  font-size: 16px;
+  color: #fb5e2e;
+  font-size: 18px;
+  min-width: 18px;
 }
 
 /* Button Styles */
 .add-button {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
   padding: 8px 16px;
-  background: #ffffff;
-  border: 1.5px solid #000000;
-  color: #000000;
-  border-radius: 4px;
-  font-weight: 500;
+  background: #f9fafb;
+  color: #4b5563;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 13px;
-  height: 36px;
+  width: 100%;
+  margin-top: 12px;
 }
 
 .add-button:hover {
-  background: #000000;
-  color: #ffffff;
+  background: #f3f4f6;
+  border-color: #fb5e2e;
+  color: #fb5e2e;
 }
 
 .add-session-button {
-  width: 100%;
-  justify-content: center;
-  margin-top: 16px;
-  height: 40px;
-  font-size: 14px;
+  margin-bottom: 32px;
+  background: #f9fafb;
+  color: #4b5563;
+  border-color: #d1d5db;
 }
 
 .save-button {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
+  width: 100%;
+  padding: 16px 32px;
+  background: #fb5e2e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: #000000;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
+  justify-content: center;
+  gap: 12px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-  z-index: 100;
-  font-size: 14px;
-  height: 44px;
+  transition: all 0.3s ease;
+  margin-top: 32px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .save-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: #ef4444;
+  transform: translateY(-2px);
 }
 
 /* Responsive Design */
@@ -374,14 +418,12 @@ textarea::placeholder {
   }
 
   .session-card {
-    padding: 20px;
+    padding: 16px;
   }
 
   .save-button {
-    bottom: 16px;
-    right: 16px;
-    width: calc(100% - 32px);
-    justify-content: center;
+    padding: 12px 24px;
+    font-size: 14px;
   }
 }
 
@@ -389,7 +431,7 @@ textarea::placeholder {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -398,72 +440,7 @@ textarea::placeholder {
 }
 
 .session-card,
-.chapter-card,
-.form-section {
-  animation: fadeIn 0.2s ease-out;
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .create-study-plan {
-    background: linear-gradient(to bottom right, #ffffff, #ffffff);
-  }
-
-  .study-plan-form {
-    background: #ffffff;
-  }
-
-  h1, h2 {
-    color: #000000;
-  }
-
-  .form-section {
-    background: #ffffff;
-  }
-
-  input[type="text"],
-  input[type="date"],
-  input[type="url"],
-  textarea {
-    background: #ffffff;
-    border-color: #000000;
-    color: #000000;
-  }
-
-  .chapter-card {
-    background: #ffffff;
-  }
-
-  .chapter-header {
-    background: #ffffff;
-    border-color: #000000;
-  }
-
-  label {
-    color: #000000;
-  }
-}
-
-/* Additional styles for buttons, etc... */
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 24px;
-}
-
-.submit-button {
-  padding: 12px 24px;
-  background: #fb5e2e;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.submit-button:hover {
-  background: #ff7346;
-  transform: translateY(-2px);
+.form-section,
+.chapter-card {
+  animation: fadeIn 0.3s ease-out forwards;
 } 

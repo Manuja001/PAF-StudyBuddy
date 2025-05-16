@@ -11,12 +11,25 @@ const StudyPlanList = () => {
   const [planToDelete, setPlanToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeCategory, setActiveCategory] = useState('');
   const plansPerPage = 8;
   const navigate = useNavigate();
+
+  const categories = [
+    { id: 'programming', name: 'Programming' },
+    { id: 'web-development', name: 'Web Development' },
+    { id: 'photography', name: 'Photography' },
+    { id: 'graphic-design', name: 'Graphic Design' }
+  ];
 
   useEffect(() => {
     fetchStudyPlans();
   }, []);
+
+  // Reset to first page when search query or category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, activeCategory]);
 
   const fetchStudyPlans = async () => {
     try {
@@ -26,7 +39,29 @@ const StudyPlanList = () => {
       }
       const data = await response.json();
       console.log('Fetched study plans:', data);
-      setStudyPlans(data);
+      
+      // Process study plans to ensure they have category information
+      const processedData = data.map(plan => {
+        // If plan doesn't have a category, try to infer one from the title or description
+        if (!plan.category) {
+          const title = plan.title.toLowerCase();
+          const description = plan.description.toLowerCase();
+          
+          if (title.includes('programming') || title.includes('coding') || 
+              description.includes('programming') || description.includes('coding')) {
+            return { ...plan, category: 'programming' };
+          } else if (title.includes('web') || description.includes('web')) {
+            return { ...plan, category: 'web-development' };
+          } else if (title.includes('photo') || description.includes('photo')) {
+            return { ...plan, category: 'photography' };
+          } else if (title.includes('design') || description.includes('design')) {
+            return { ...plan, category: 'graphic-design' };
+          }
+        }
+        return plan;
+      });
+      
+      setStudyPlans(processedData);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching study plans:', error);
@@ -35,10 +70,19 @@ const StudyPlanList = () => {
     }
   };
 
-  const filteredStudyPlans = studyPlans.filter(plan =>
-    plan.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    plan.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredStudyPlans = studyPlans.filter(plan => {
+    // First filter by search text
+    const matchesSearch = 
+      plan.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      plan.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Then filter by category if one is selected
+    if (activeCategory && plan.category) {
+      return matchesSearch && plan.category.toLowerCase() === activeCategory.toLowerCase();
+    }
+    
+    return matchesSearch;
+  });
 
   // Calculate pagination
   const indexOfLastPlan = currentPage * plansPerPage;
@@ -212,6 +256,23 @@ const StudyPlanList = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+        </div>
+        <div className="category-filters">
+          <button 
+            className={`category-button ${activeCategory === '' ? 'active' : ''}`} 
+            onClick={() => setActiveCategory('')}
+          >
+            All
+          </button>
+          {categories.map(category => (
+            <button 
+              key={category.id}
+              className={`category-button ${activeCategory === category.id ? 'active' : ''}`} 
+              onClick={() => setActiveCategory(category.id)}
+            >
+              {category.name}
+            </button>
+          ))}
         </div>
       </div>
 

@@ -2,8 +2,11 @@ package com.studybuddy.backend.model;
 
 import jakarta.persistence.*;
 import java.util.List;
+import lombok.Data;
+
 
 @Entity
+@Data
 public class StudyPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -77,7 +77,12 @@ const Navbar = () => {
             <li>
               <Link to="/view-study-plan" className={`nav-item ${isActive('/view-study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>View Study Plan</Link>
             </li>
-            
+            <li>
+              <Link to="/posts" className={`nav-item ${isActive('/posts') ? 'nav-item-active' : 'nav-item-default'}`}>Posts</Link>
+            </li>
+            <li>
+              <Link to="/login" className={`nav-item ${isActive('/login') ? 'nav-item-active' : 'nav-item-default'}`}>Login</Link>
+            </li>
             <li>
               <Link to="/signup" className="nav-button">Sign Up</Link>
             </li>

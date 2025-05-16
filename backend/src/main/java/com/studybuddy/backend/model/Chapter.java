@@ -2,8 +2,15 @@ package com.studybuddy.backend.model;
 
 import jakarta.persistence.*;
 import java.util.List;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Chapter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

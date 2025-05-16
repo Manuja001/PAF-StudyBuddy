@@ -187,13 +187,13 @@ const CreateStudyPlan = () => {
         body: formData,
         headers: {
           'Accept': 'application/json',
-        }
+        },
+        credentials: 'include'
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Server response:', errorText);
-        throw new Error(`Failed to create study plan: ${errorText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create study plan');
       }
 
       const result = await response.json();

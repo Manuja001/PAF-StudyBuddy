@@ -65,18 +65,19 @@ const Navbar = () => {
               </a>
             </li>
             <li>
-              <Link to="/study-plan" className={`nav-item ${isActive('/study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>Create Study Plan</Link>
-            </li>
-            <li>
-              <Link to="/view-study-plan" className={`nav-item ${isActive('/view-study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>View Study Plan</Link>
-            </li>
-            <li>
               <a href="#contact" 
                  onClick={(e) => handleNavClick(e, 'contact')} 
                  className="nav-item nav-item-default">
                 Contact
               </a>
             </li>
+            <li>
+              <Link to="/study-plan" className={`nav-item ${isActive('/study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>Create Study Plan</Link>
+            </li>
+            <li>
+              <Link to="/view-study-plan" className={`nav-item ${isActive('/view-study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>View Study Plan</Link>
+            </li>
+            
             <li>
               <Link to="/signup" className="nav-button">Sign Up</Link>
             </li>

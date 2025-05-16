@@ -2,14 +2,17 @@
   min-height: 100vh;
   background: #000000;
   padding: 24px;
+  margin-top: 70px; /* Match navbar height */
 }
 
 .study-plan-container {
   max-width: 1000px;
   margin: 0 auto;
-  background: #ffffff;
+  background: #1a1a1a; /* Darker background to match theme */
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(251, 94, 46, 0.2);
 }
 
 .study-plan-header {
@@ -23,17 +26,28 @@
   object-fit: cover;
 }
 
+.header-content {
+  padding: 24px;
+}
+
+.title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .study-plan-header h1 {
   font-size: 32px;
-  color: #000000;
-  margin: 24px;
+  color: #ffffff; /* Light text on dark background */
+  margin: 0;
   font-weight: 600;
+  font-family: 'Barbus Neue', sans-serif;
 }
 
 .study-plan-header .description {
   font-size: 16px;
-  color: #000000;
-  margin: 0 24px 24px;
+  color: #9CA3AF; /* Lighter gray for description */
   line-height: 1.6;
 }
 
@@ -51,9 +65,10 @@
 
 .session-title {
   font-size: 24px;
-  color: #000000;
+  color: #ffffff;
   margin-bottom: 24px;
   font-weight: 600;
+  font-family: 'Barbus Neue', sans-serif;
 }
 
 .chapters {
@@ -62,22 +77,29 @@
 }
 
 .chapter {
-  background: #ffffff;
-  border: 1px solid #000000;
+  background: #2a2a2a; /* Darker card background */
+  border: 1px solid rgba(251, 94, 46, 0.2);
   border-radius: 8px;
   padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.chapter:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 94, 46, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .chapter-title {
   font-size: 20px;
-  color: #000000;
+  color: #ffffff;
   margin-bottom: 12px;
   font-weight: 500;
 }
 
 .chapter-description {
   font-size: 14px;
-  color: #000000;
+  color: #9CA3AF;
   margin-bottom: 24px;
   line-height: 1.6;
 }
@@ -88,7 +110,7 @@
 
 .todos h4, .resources h4 {
   font-size: 16px;
-  color: #000000;
+  color: #fb5e2e; /* Orange accent color */
   margin-bottom: 12px;
   font-weight: 500;
 }
@@ -107,14 +129,15 @@
 .todo-item input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  border: 2px solid #000000;
+  border: 2px solid #fb5e2e;
   border-radius: 4px;
   cursor: pointer;
+  accent-color: #fb5e2e;
 }
 
 .todo-item span {
   font-size: 14px;
-  color: #000000;
+  color: #ffffff;
 }
 
 .todo-item span.completed {
@@ -130,57 +153,20 @@
 
 .resource-link {
   display: inline-block;
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
   font-size: 14px;
   padding: 8px 16px;
-  background: #ffffff;
-  border: 1px solid #000000;
+  background: rgba(251, 94, 46, 0.1);
+  border: 1px solid rgba(251, 94, 46, 0.3);
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .resource-link:hover {
-  background: #000000;
-  color: #ffffff;
-}
-
-@media (max-width: 768px) {
-  .view-study-plan {
-    padding: 16px;
-  }
-
-  .study-plan-header h1 {
-    font-size: 24px;
-    margin: 16px;
-  }
-
-  .study-plan-header .description {
-    margin: 0 16px 16px;
-  }
-
-  .sessions {
-    padding: 0 16px 16px;
-  }
-
-  .chapter {
-    padding: 16px;
-  }
-
-  .cover-image {
-    height: 200px;
-  }
-}
-
-.header-content {
-  padding: 24px;
-}
-
-.title-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  background: rgba(251, 94, 46, 0.2);
+  border-color: #fb5e2e;
+  transform: translateX(2px);
 }
 
 .delete-button {
@@ -203,4 +189,41 @@
 .delete-button svg {
   width: 24px;
   height: 24px;
+}
+
+.loading, .error {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.error {
+  color: #ff4444;
+}
+
+@media (max-width: 768px) {
+  .view-study-plan {
+    padding: 16px;
+  }
+
+  .header-content {
+    padding: 16px;
+  }
+
+  .study-plan-header h1 {
+    font-size: 24px;
+  }
+
+  .sessions {
+    padding: 0 16px 16px;
+  }
+
+  .chapter {
+    padding: 16px;
+  }
+
+  .cover-image {
+    height: 200px;
+  }
 } 

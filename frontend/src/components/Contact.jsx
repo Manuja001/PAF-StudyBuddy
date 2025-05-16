@@ -74,12 +74,38 @@ const Contact = () => {
         </div>
 
         <div className="contact-content">
-          <div className="contact-form">
-            <input type="text" placeholder="name" className="contact-input" />
-            <input type="email" placeholder="email address" className="contact-input" />
-            <textarea placeholder="tell us all about it" className="contact-input contact-textarea"></textarea>
+          <form className="contact-form">
+            <input 
+              type="text" 
+              placeholder="name" 
+              className="contact-input" 
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(251, 94, 46, 0.2)',
+                color: 'white'
+              }}
+            />
+            <input 
+              type="email" 
+              placeholder="email address" 
+              className="contact-input"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(251, 94, 46, 0.2)',
+                color: 'white'
+              }}
+            />
+            <textarea 
+              placeholder="tell us all about it" 
+              className="contact-input contact-textarea"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(251, 94, 46, 0.2)',
+                color: 'white'
+              }}
+            ></textarea>
             <button className="contact-submit">send</button>
-          </div>
+          </form>
 
           <div className="contact-info">
             <h3 className="info-title">Join us in building the future of education</h3>

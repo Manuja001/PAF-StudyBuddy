@@ -11,7 +11,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class User {
     @Id
     private String id; // Unique identifier for the user

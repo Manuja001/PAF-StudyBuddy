@@ -1,0 +1,80 @@
+{
+  "title": "Web Development Bootcamp",
+  "description": "Complete web development course covering frontend and backend technologies",
+  "sessions": [
+    {
+      "name": "Frontend Fundamentals",
+      "chapters": [
+        {
+          "title": "HTML & CSS Basics",
+          "description": "Learn the fundamentals of HTML5 and CSS3",
+          "todos": [
+            {
+              "text": "Complete HTML structure exercise",
+              "completed": false
+            },
+            {
+              "text": "Style a webpage with CSS",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "MDN Web Docs",
+              "url": "https://developer.mozilla.org/en-US/docs/Web"
+            },
+            {
+              "title": "CSS Tricks",
+              "url": "https://css-tricks.com"
+            }
+          ]
+        },
+        {
+          "title": "JavaScript Essentials",
+          "description": "Master core JavaScript concepts",
+          "todos": [
+            {
+              "text": "Practice array methods",
+              "completed": false
+            },
+            {
+              "text": "Build a simple calculator",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "JavaScript.info",
+              "url": "https://javascript.info"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Backend Development",
+      "chapters": [
+        {
+          "title": "Node.js Basics",
+          "description": "Introduction to Node.js and server-side JavaScript",
+          "todos": [
+            {
+              "text": "Create a basic HTTP server",
+              "completed": false
+            },
+            {
+              "text": "Implement REST API endpoints",
+              "completed": false
+            }
+          ],
+          "resources": [
+            {
+              "title": "Node.js Documentation",
+              "url": "https://nodejs.org/docs"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+} 

@@ -6,7 +6,7 @@ import com.studybuddy.backend.filters.JwtAutenticationFilter;
 import com.studybuddy.backend.service.AppUserDetailsService;
 import com.studybuddy.backend.service.CustomOAuth2UserService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +28,12 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final AppUserDetailsService userDetailsService;
     private final JwtAutenticationFilter jwtAuthenticationFilter;
-    private final CustomOAuth2UserService customOAuth2UserService; // ✨ inject ready service
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -41,7 +41,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/register", "/api/login", "/", "/error", "/api/users").permitAll()
+                        .requestMatchers("/api/register", "/api/login", "/", "/error", "/api/users", 
+                                       "/api/study-plans/**", "/uploads/**").permitAll()
                         .anyRequest()
                         .authenticated())
                 .oauth2Login(oauth2 -> oauth2

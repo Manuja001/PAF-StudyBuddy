@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiTrash2, FiBook, FiCheckCircle, FiCircle } from 'react-icons/fi';
+import { FiTrash2, FiBook, FiCheckCircle } from 'react-icons/fi';
 import './ViewStudyPlan.css';
 
 const ViewStudyPlan = () => {
@@ -66,22 +66,6 @@ const ViewStudyPlan = () => {
     });
     
     return totalTodos === 0 ? 0 : Math.round((completedTodos / totalTodos) * 100);
-  };
-
-  // Toggle todo completion status
-  const toggleTodoCompletion = (chapterIndex, todoIndex) => {
-    const updatedStudyPlan = { ...studyPlan };
-    const todo = updatedStudyPlan.sessions[activeSession].chapters[chapterIndex].todos[todoIndex];
-    todo.completed = !todo.completed;
-    
-    setStudyPlan(updatedStudyPlan);
-    
-    // In a real app, you would also update the backend
-    // For now we'll just update the local state
-    console.log(`Todo "${todo.text}" marked as ${todo.completed ? 'completed' : 'incomplete'}`);
-    
-    // Ideally, you'd send an update to your API here
-    // updateTodoInBackend(todo.id, todo.completed);
   };
 
   if (loading) {
@@ -155,9 +139,6 @@ const ViewStudyPlan = () => {
                           <div 
                             className="progress-fill" 
                             style={{ width: `${progress}%` }}
-                            aria-valuenow={progress}
-                            aria-valuemin="0"
-                            aria-valuemax="100"
                           ></div>
                         </div>
                         <span className="progress-text">{progress}%</span>
@@ -197,16 +178,12 @@ const ViewStudyPlan = () => {
                       <div className="todos">
                         <h4>Tasks</h4>
                         {chapter.todos.map((todo, todoIndex) => (
-                          <div 
-                            key={todoIndex} 
-                            className="todo-item"
-                            onClick={() => toggleTodoCompletion(chapterIndex, todoIndex)}
-                          >
+                          <div key={todoIndex} className="todo-item">
                             <div className="todo-checkbox">
                               {todo.completed ? (
                                 <FiCheckCircle className="checkbox-icon completed" />
                               ) : (
-                                <FiCircle className="checkbox-icon" />
+                                <div className="checkbox-outline" />
                               )}
                             </div>
                             <span className={todo.completed ? 'completed' : ''}>

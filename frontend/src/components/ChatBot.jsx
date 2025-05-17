@@ -35,6 +35,7 @@ function ChatBot() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Input submitted:", input);
     if (!input.trim()) return;
 
     setChatLog((prev) => [...prev, { user: "me", message: input }]);
@@ -46,7 +47,7 @@ function ChatBot() {
       const response = await axios.post("/api/chatbot", {
         message: userMessage,
       });
-
+      console.log("Response from server:", response.data);
       setChatLog((prev) => [
         ...prev,
         { user: "ai", message: response.data.message },

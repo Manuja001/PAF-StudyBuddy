@@ -25,23 +25,20 @@ function Login() {
           const response = await axios.post("/oauth2/callback/google", {
             code,
           });
-          console.log(response.data);
           if (response.status === 200) {
             const token = response.data.token;
             const userId = response.data.id;
             localStorage.setItem("token", token);
-
+            localStorage.setItem("userId", userId);
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             toast.success("Login successful!");
             navigate(`/Profile/${userId}`);
           }
         } catch (error) {
-          console.error("Error during OAuth login:", error);
           toast.error("Login failed. Please try again.");
         }
       }
     };
-
     fetchOAuthToken();
   }, [navigate]);
 
@@ -64,40 +61,21 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     setLoading(true);
-
     try {
-      console.log("Form data before sending:", formData);
       const response = await axios.post("/api/login", formData);
-      console.log(response.data);
-      if (
-        (response.status === 200 && response.data.role === "User") ||
-        response.data.role === "user" ||
-        response.data.role === "USER"
-      ) {
+      if (response.status === 200) {
         const token = response.data.token;
+        const userId = response.data.id;
         localStorage.setItem("token", token);
-
+        localStorage.setItem("userId", userId);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         toast.success("Login successful!");
-        navigate(`/Profile/${response.data.id}`);
-      } else if (
-        (response.status === 200 && response.data.role === "admin") ||
-        response.data.role === "ADMIN" ||
-        response.data.role === "Admin"
-      ) {
-        const token = response.data.token;
-        localStorage.setItem("token", token);
-
-        toast.success("Login successful!");
-        navigate(`/admin`);
+        navigate(`/profile/${userId}`);
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      toast.error("Login failed. Please try again.");
+      toast.error("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }

@@ -7,8 +7,8 @@ import password from "../assets/password.png";
 import showPasswordIcon from "../assets/showPassword.png";
 import hidePasswordIcon from "../assets/hidePassword.png";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import axios from "../config/axios";
+import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
 const Register = () => {
@@ -36,37 +36,31 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    console.log(formData);
+    if (!validateForm()) return;
     const dataToSubmit = {
       ...formData,
       role: "User",
-      bio: "Hi I am " + formData.firstName + " " + formData.lastName,
+      bio:
+        "Hi I am " +
+        (formData.firstName || "") +
+        " " +
+        (formData.lastName || ""),
     };
-    console.log("formDate: ", dataToSubmit);
-
     setLoading(true);
-
     try {
-      console.log(dataToSubmit);
       const response = await axios.post("/api/register", dataToSubmit);
       if (response.status === 200) {
         toast.success("Registration successful!");
-        //redirect to login or home page
         navigate("/login");
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        // Handle the error message from the backend
         const errorMessage =
           error.response.data.message || "Registration failed.";
         if (errorMessage.includes("User already exists")) {
           toast.error("Email already exists. Please use a different email.");
         }
       } else {
-        console.error("Error during registration:", error);
         toast.error("Registration failed. Please try again.");
       }
     } finally {

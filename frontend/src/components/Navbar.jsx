@@ -1,11 +1,47 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoBlack from "../assets/logoblack.png";
 import "./Navbar.css";
+import { FiUser } from "react-icons/fi";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [userId, setUserId] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is authenticated by looking for token in localStorage
+    const token = localStorage.getItem("token");
+    const storedUserId = localStorage.getItem("userId");
+    setIsAuthenticated(!!token);
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else if (token) {
+      // If we have a token but no userId, redirect to login
+      handleLogout();
+    }
+  }, [location]); // Re-check when location changes
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    setIsAuthenticated(false);
+    setUserId(null);
+    setShowLogin(false);
+    navigate("/login");
+  };
+
+  const handleAuthButtonClick = () => {
+    if (!showLogin) {
+      setShowLogin(true);
+      navigate("/register");
+    } else {
+      navigate("/login");
+    }
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -61,7 +97,7 @@ const Navbar = () => {
           <ul className="nav-list">
             <li>
               <Link
-                to="/HomePage"
+                to="/"
                 className={`nav-item ${
                   isActive("/") ? "nav-item-active" : "nav-item-default"
                 }`}
@@ -110,36 +146,12 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                to="/view-study-plan"
-                className={`nav-item ${
-                  isActive("/view-study-plan")
-                    ? "nav-item-active"
-                    : "nav-item-default"
-                }`}
-              >
-                View Study Plan
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/posts"
                 className={`nav-item ${
                   isActive("/posts") ? "nav-item-active" : "nav-item-default"
                 }`}
               >
                 Posts
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/create-post"
-                className={`nav-item ${
-                  isActive("/create-post")
-                    ? "nav-item-active"
-                    : "nav-item-default"
-                }`}
-              >
-                Create Post
               </Link>
             </li>
             <li>

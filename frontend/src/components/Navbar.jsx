@@ -9,6 +9,24 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setIsMenuOpen(false);
+    }
+  };
+
+  const handleNavClick = (e, sectionId) => {
+    e.preventDefault();
+    if (location.pathname !== "/") {
+      // If not on home page, navigate to home and then scroll
+      window.location.href = `/#${sectionId}`;
+    } else {
+      scrollToSection(sectionId);
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -43,7 +61,7 @@ const Navbar = () => {
           <ul className="nav-list">
             <li>
               <Link
-                to="/"
+                to="/HomePage"
                 className={`nav-item ${
                   isActive("/") ? "nav-item-active" : "nav-item-default"
                 }`}
@@ -52,14 +70,31 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/#features" className="nav-item nav-item-default">
+              <a
+                href="#features"
+                onClick={(e) => handleNavClick(e, "features")}
+                className="nav-item nav-item-default"
+              >
                 Features
-              </Link>
+              </a>
             </li>
             <li>
-              <Link to="/#about" className="nav-item nav-item-default">
+              <a
+                href="#about"
+                onClick={(e) => handleNavClick(e, "about")}
+                className="nav-item nav-item-default"
+              >
                 About
-              </Link>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "contact")}
+                className="nav-item nav-item-default"
+              >
+                Contact
+              </a>
             </li>
             <li>
               <Link
@@ -86,8 +121,35 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/#contact" className="nav-item nav-item-default">
-                Contact
+              <Link
+                to="/posts"
+                className={`nav-item ${
+                  isActive("/posts") ? "nav-item-active" : "nav-item-default"
+                }`}
+              >
+                Posts
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/create-post"
+                className={`nav-item ${
+                  isActive("/create-post")
+                    ? "nav-item-active"
+                    : "nav-item-default"
+                }`}
+              >
+                Create Post
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/login"
+                className={`nav-item ${
+                  isActive("/login") ? "nav-item-active" : "nav-item-default"
+                }`}
+              >
+                Login
               </Link>
             </li>
             <li>

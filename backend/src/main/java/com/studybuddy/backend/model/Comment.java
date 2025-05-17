@@ -3,8 +3,12 @@ package com.studybuddy.backend.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.AllArgsConstructor;
 
 @Document(collection = "comments")
+@Data
+@AllArgsConstructor
 public class Comment {
     @Id
     private String id;

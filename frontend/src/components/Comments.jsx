@@ -159,10 +159,10 @@ const Comments = () => {
   };
 
   const toggleSortOrder = () => {
-    const sortIcon = document.querySelector('.sort-icon');
+    const sortIcon = document.querySelector(".sort-icon");
     if (sortIcon) {
-      sortIcon.classList.add('changing');
-      setTimeout(() => sortIcon.classList.remove('changing'), 600);
+      sortIcon.classList.add("changing");
+      setTimeout(() => sortIcon.classList.remove("changing"), 600);
     }
     setSortOrder(sortOrder === "newest" ? "oldest" : "newest");
   };

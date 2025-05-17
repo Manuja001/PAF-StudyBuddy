@@ -4,15 +4,16 @@ import { toast } from "react-toastify";
 import UserProfile from "../assets/userProfile1.png";
 import EditIcon from "../assets/pen.png";
 import axios from "../config/axios";
+import { useNavigate } from "react-router-dom";
+import "./Profile.css";
 
 function Profile() {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-
   const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch user profile data from API
     const fetchProfile = async () => {
       try {
         const response = await axios.get(`/api/users/${id}`, {});
@@ -24,12 +25,9 @@ function Profile() {
     };
     fetchProfile();
   }, [id]);
-  console.log(id);
 
-  // Function to handle profile picture change
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -39,14 +37,10 @@ function Profile() {
     }
   };
 
-  // Function to handle profile update
   const handleProfileUpdate = () => {
     setIsEditing(false);
-    //send updated profile data to the server
-
     const updateProfile = async () => {
       try {
-        console.log(profile);
         const response = await fetch(`http://localhost:8080/api/users/${id}`, {
           method: "PUT",
           headers: {
@@ -55,7 +49,6 @@ function Profile() {
           },
           body: JSON.stringify(profile),
         });
-
         if (!response.ok) {
           throw new Error("Failed to update profile data");
         }
@@ -65,53 +58,49 @@ function Profile() {
         toast.error("Failed to update profile. Please try again.");
       }
     };
-    console.log(profile);
     updateProfile();
   };
 
   if (!profile) {
-    // Show a loading state until the profile data is fetched
-    return <div>Loading...</div>;
+    return <div className="profile-loading">Loading...</div>;
   }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login"; // Redirect to login page
+    window.location.href = "/login";
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen py-10">
-      <div className="container mx-auto bg-white rounded-2xl shadow-xl p-10 w-[90%] max-w-3xl">
-        <div className="text-center mb-6 ">
+    <div className="profile-bg">
+      <div className="profile-container">
+        <div className="profile-header">
           <img
             src={profile.profilePictureUrl || UserProfile}
             alt="Profile"
-            className="rounded-full mx-auto w-32 h-32 border-4 p-2 shadow-md  border-amber-600"
+            className="profile-avatar"
           />
-          <h1 className="text-3xl font-extrabold mt-4">
+          <h1 className="profile-name">
             {profile.firstName} {profile.lastName}
           </h1>
-          <p className="text-gray-600 text-sm">{profile.email}</p>
+          <p className="profile-email">{profile.email}</p>
         </div>
 
-        <div className="bg-sky-100 p-5 rounded-xl shadow mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-sky-900">
-            Profile Details
-          </h2>
-          <div className="space-y-4">
+        <div className="profile-details-box">
+          <h2 className="profile-details-title">Profile Details</h2>
+          <div className="profile-details-content">
             {isEditing ? (
               <div>
-                <div className="mb-4">
+                <div className="profile-edit-field">
                   <input
                     type="file"
-                    className="border p-2 rounded-md w-full"
+                    className="profile-input"
                     onChange={handleProfilePictureChange}
                   />
                 </div>
-                <div className="mb-4">
+                <div className="profile-edit-field">
                   <input
                     type="text"
-                    className="border p-2 rounded-md w-full"
+                    className="profile-input"
                     value={profile.firstName}
                     onChange={(e) =>
                       setProfile({ ...profile, firstName: e.target.value })
@@ -119,10 +108,10 @@ function Profile() {
                     placeholder="Enter your First Name"
                   />
                 </div>
-                <div className="mb-4">
+                <div className="profile-edit-field">
                   <input
                     type="text"
-                    className="border p-2 rounded-md w-full"
+                    className="profile-input"
                     value={profile.lastName}
                     onChange={(e) =>
                       setProfile({ ...profile, lastName: e.target.value })
@@ -130,10 +119,10 @@ function Profile() {
                     placeholder="Enter your Last Name"
                   />
                 </div>
-                <div className="mb-4">
+                <div className="profile-edit-field">
                   <input
                     type="text"
-                    className="border p-2 rounded-md w-full"
+                    className="profile-input"
                     value={profile.email}
                     onChange={(e) =>
                       setProfile({ ...profile, email: e.target.value })
@@ -141,9 +130,9 @@ function Profile() {
                     placeholder="Change your Email address"
                   />
                 </div>
-                <div className="mb-4">
+                <div className="profile-edit-field">
                   <textarea
-                    className="border p-2 rounded-md w-full"
+                    className="profile-input"
                     value={profile.bio}
                     onChange={(e) =>
                       setProfile({ ...profile, bio: e.target.value })
@@ -151,17 +140,16 @@ function Profile() {
                     placeholder="Enter your bio"
                   />
                 </div>
-                <div className="text-center flex place-content-evenly">
+                <div className="profile-edit-actions">
                   <button
                     onClick={handleProfileUpdate}
-                    className="bg-green-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+                    className="profile-btn profile-btn-save"
                   >
                     Save Changes
                   </button>
                   <button
                     onClick={() => {
                       setIsEditing(false);
-                      // Re-fetch original profile data if discard is clicked
                       fetch(`http://localhost:8080/api/users/${id}`, {
                         headers: {
                           "Content-Type": "application/json",
@@ -173,7 +161,7 @@ function Profile() {
                         .then((res) => res.json())
                         .then((data) => setProfile(data));
                     }}
-                    className="bg-red-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+                    className="profile-btn profile-btn-discard"
                   >
                     Discard
                   </button>
@@ -181,11 +169,11 @@ function Profile() {
               </div>
             ) : (
               <div>
-                <p>{profile.bio}</p>
-                <div className="text-center mt-4">
+                <p className="profile-bio">{profile.bio}</p>
+                <div className="profile-edit-btn-wrapper">
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+                    className="profile-btn profile-btn-edit"
                   >
                     Edit Profile
                   </button>
@@ -196,26 +184,21 @@ function Profile() {
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-2 gap-4 text-center mb-6">
-          <div className="bg-green-100 p-4 rounded-xl shadow hover:scale-105 transition">
-            <p className="text-2xl font-bold text-green-600">
-              {profile.followers}
-            </p>
-            <p className="text-sm font-medium text-gray-700">Followers</p>
+        <div className="profile-stats-grid">
+          <div className="profile-stat profile-stat-followers">
+            <p className="profile-stat-value">{profile.followers}</p>
+            <p className="profile-stat-label">Followers</p>
           </div>
-          <div className="bg-yellow-100 p-4 rounded-xl shadow hover:scale-105 transition">
-            <p className="text-2xl font-bold text-yellow-600">
-              {profile.following}
-            </p>
-            <p className="text-sm font-medium text-gray-700">Following</p>
+          <div className="profile-stat profile-stat-following">
+            <p className="profile-stat-value">{profile.following}</p>
+            <p className="profile-stat-label">Following</p>
           </div>
         </div>
 
         {/* Follow Button */}
-        <div className="text-center mb-6">
+        <div className="profile-chatbot-btn-wrapper">
           <button
-            className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
-            // navigate to /chatbot  on click
+            className="profile-btn profile-btn-chatbot"
             onClick={() => {
               window.location.href = "/chatBot";
             }}
@@ -225,51 +208,58 @@ function Profile() {
         </div>
 
         {/* Profile Details Section */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center bg-indigo-100 p-4 rounded-xl shadow">
-            <span className="font-semibold text-indigo-900">Email:</span>
-            <span className="text-indigo-700">{profile.email}</span>
-            <img src={EditIcon} alt="Edit" className="w-5 h-5 cursor-pointer" />
+        <div className="profile-info-list">
+          <div className="profile-info-row profile-info-row-email">
+            <span className="profile-info-label">Email:</span>
+            <span className="profile-info-value">{profile.email}</span>
+            <img src={EditIcon} alt="Edit" className="profile-info-edit-icon" />
           </div>
-
-          <div className="flex justify-between items-center bg-pink-100 p-4 rounded-xl shadow">
-            <span className="font-semibold text-pink-900">Profile Status:</span>
-            <span className="text-green-600 font-bold">Active</span>
+          <div className="profile-info-row profile-info-row-status">
+            <span className="profile-info-label">Profile Status:</span>
+            <span className="profile-info-status">Active</span>
           </div>
         </div>
 
         {/* Post Section */}
-
-        <div className="bg-purple-100 p-5 rounded-xl shadow mb-6 mt-8">
-          <h2 className="text-xl font-semibold mb-2 text-purple-900">
-            My Posts
-          </h2>
-          <div className="space-y-4">
-            <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition">
-              <h3 className="text-lg font-bold">How to build a React App</h3>
-              <p className="text-gray-600 text-sm">Posted on Jan 15, 2024</p>
-              <p className="text-gray-700 mt-2">
+        <div className="profile-posts-box">
+          <h2 className="profile-posts-title">My Posts</h2>
+          <div className="profile-posts-list">
+            <div className="profile-post">
+              <h3 className="profile-post-title">How to build a React App</h3>
+              <p className="profile-post-date">Posted on Jan 15, 2024</p>
+              <p className="profile-post-content">
                 In this post, I walk through the process of setting up a React
                 app from scratch.
               </p>
             </div>
-            <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition">
-              <h3 className="text-lg font-bold">Mastering Spring Boot</h3>
-              <p className="text-gray-600 text-sm">Posted on Jan 12, 2024</p>
-              <p className="text-gray-700 mt-2">
+            <div className="profile-post">
+              <h3 className="profile-post-title">Mastering Spring Boot</h3>
+              <p className="profile-post-date">Posted on Jan 12, 2024</p>
+              <p className="profile-post-content">
                 Spring Boot simplifies Java development. Here you can find
                 everything you need to know to get started.
               </p>
             </div>
-            <div className="text-center mt-4 flex place-content-evenly">
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4">
+            <div className="profile-posts-actions">
+              <button
+                className="profile-btn profile-btn-view"
+                onClick={() => {
+                  navigate("/posts");
+                }}
+              >
                 View All Posts
               </button>
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4 ml-4">
+
+              <button
+                className="profile-btn profile-btn-create"
+                onClick={() => {
+                  navigate("/create-post");
+                }}
+              >
                 Create New Post
               </button>
               <button
-                className="bg-red-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4 ml-4"
+                className="profile-btn profile-btn-logout"
                 onClick={handleLogout}
               >
                 Log out

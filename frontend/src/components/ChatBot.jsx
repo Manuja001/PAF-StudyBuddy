@@ -4,6 +4,7 @@ import bot from "../assets/bot.png";
 import add from "../assets/add.png";
 import ProfilePic from "../assets/userProfile.png";
 import axios from "../config/axios";
+import "./ChatBot.css";
 
 function ChatBot() {
   const [input, setInput] = useState("");
@@ -62,55 +63,44 @@ function ChatBot() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-800 text-white">
+    <div className="chatbot-root">
       {/* Sidebar */}
-      <aside className="w-full md:w-1/3 lg:w-1/4 bg-blue-950 p-4 overflow-y-auto">
-        <div className="flex items-center justify-between border-b border-white pb-4 mb-4">
-          <h2 className="text-lg font-bold">AI Assistant</h2>
-          <img src={bot} alt="bot" className="w-6 h-6" />
+      <aside className="chatbot-sidebar">
+        <div className="chatbot-sidebar-header">
+          <h2 className="chatbot-title">AI Assistant</h2>
+          <img src={bot} alt="bot" className="chatbot-bot-icon" />
         </div>
-
-        {/* New Chat Button */}
-        <button
-          onClick={clearChatLog}
-          className="flex items-center justify-between bg-blue-900 border border-white w-full py-2 px-4 rounded-lg hover:bg-white hover:text-blue-900 transition font-semibold"
-        >
-          New Chat <img src={add} alt="add" className="w-5 h-5 ml-2" />
+        <button onClick={clearChatLog} className="chatbot-newchat-btn">
+          New Chat <img src={add} alt="add" className="chatbot-add-icon" />
         </button>
       </aside>
 
       {/* Chat Area */}
-      <section className="flex-1 flex flex-col bg-gray-900 relative">
+      <section className="chatbot-chat-area">
         {/* Chat Messages */}
-        <div ref={chatLogRef} className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div ref={chatLogRef} className="chatbot-messages">
           {chatLog.map((msg, idx) => (
             <ChatMessage key={idx} message={msg} />
           ))}
           {loading && (
-            <div className="flex items-center space-x-2 text-gray-400">
-              <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
-              <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse delay-200"></div>
-              <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse delay-400"></div>
+            <div className="chatbot-loading">
+              <div className="chatbot-dot"></div>
+              <div className="chatbot-dot chatbot-dot-delay1"></div>
+              <div className="chatbot-dot chatbot-dot-delay2"></div>
             </div>
           )}
         </div>
 
         {/* Input */}
-        <form
-          onSubmit={handleSubmit}
-          className="flex items-center bg-gray-700 p-4 border-t border-gray-600"
-        >
+        <form onSubmit={handleSubmit} className="chatbot-input-form">
           <input
             type="text"
             placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 px-4 py-2 rounded-md bg-gray-600 text-white placeholder-gray-300 focus:outline-none"
+            className="chatbot-input"
           />
-          <button
-            type="submit"
-            className="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md transition"
-          >
+          <button type="submit" className="chatbot-send-btn">
             Send
           </button>
         </form>
@@ -125,26 +115,26 @@ const ChatMessage = ({ message }) => {
 
   return (
     <div
-      className={`flex items-start space-x-4 max-w-3xl mx-auto ${
-        isAI ? "justify-start" : "justify-end"
+      className={`chatbot-message-row ${
+        isAI ? "chatbot-message-ai" : "chatbot-message-user"
       }`}
     >
-      <div className="w-10 h-10">
+      <div className="chatbot-avatar">
         <img
           src={isAI ? bot : ProfilePic}
           alt="avatar"
-          className="rounded-full w-full h-full object-cover"
+          className="chatbot-avatar-img"
         />
       </div>
       <div>
         <div
-          className={`p-3 rounded-lg text-white ${
-            isAI ? "bg-blue-800" : "bg-green-700"
+          className={`chatbot-message-bubble ${
+            isAI ? "chatbot-bubble-ai" : "chatbot-bubble-user"
           }`}
         >
           {message.message}
         </div>
-        <p className="text-xs text-gray-400 mt-1">{timestamp}</p>
+        <p className="chatbot-timestamp">{timestamp}</p>
       </div>
     </div>
   );

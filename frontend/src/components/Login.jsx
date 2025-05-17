@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import background from "../assets/background.jpeg";
+import background from "../assets/Login.jpeg";
 import email from "../assets/email.png";
 import password from "../assets/password.png";
 import showPasswordIcon from "../assets/showPassword.png";
 import hidePasswordIcon from "../assets/hidePassword.png";
 import { toast } from "react-toastify";
 import axios from "../config/axios";
+import "./Login.css";
 
 function Login() {
   const [formData, setFormData] = useState({});
@@ -103,110 +104,89 @@ function Login() {
   };
 
   return (
-    <div className="flex h-screen w-full">
-      <div className="hidden lg:flex justify-center items-center w-1/2">
-        <img
-          src={background}
-          alt="background"
-          className="h-full w-full object-cover"
-        />
+    <div className="container">
+      <div className="image-container">
+        <img src={background} alt="background" className="background-img" />
       </div>
-      <div className="bg-slate-200 w-full items-center flex justify-center lg:w-1/2">
-        <div className="bg-white px-10 py-10 w-96 rounded-3xl mt-14 mb-10">
+      <div className="form-container">
+        <div className="form-box">
           <div>
             <h1>
-              <span className="font-semibold text-slate-600 text-5xl">
-                Welcome{" "}
-              </span>{" "}
-              <span className="font-bold text-slate-800 text-4xl"> Back!</span>
+              <span className="welcome-text">Welcome </span>
+              <span className="back-text">Back!</span>
             </h1>
-            <p className="font-medium mt-6 text-slate-600 text-lg">
-              Enter your details below!
-            </p>
+            <p className="sub-text">Enter your details below!</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-7">
-            <div className="mt-4">
-              <label className="font-medium text-base ml-10 " htmlFor="email">
+          <form onSubmit={handleSubmit} className="form">
+            <div className="input-group">
+              <label htmlFor="email" className="input-label">
                 Email
               </label>
-              <div className="flex items-center justify-center">
-                <img
-                  src={email}
-                  alt="email"
-                  className="w-6 h-6 inline-block mr-3"
-                />
+              <div className="input-wrapper">
+                <img src={email} alt="email" className="input-icon" />
                 <input
-                  className="w-full bg-transparent border-2 px-2 py-1 mt-1 border-slate-300 rounded-xl"
                   type="email"
                   id="email"
                   placeholder="Enter your Email"
                   onChange={handleChange}
                   required
+                  className="input-field"
                 />
               </div>
             </div>
 
-            <div className="mt-4">
-              <label className="font-medium text-base ml-10" htmlFor="password">
+            <div className="input-group">
+              <label htmlFor="password" className="input-label">
                 Password
               </label>
-              <div className="flex items-center justify-center mt-1">
-                <img
-                  src={password}
-                  alt="password"
-                  className="w-6 h-6 inline-block mr-3"
-                />
-                <div className="relative w-full">
+              <div className="input-wrapper">
+                <img src={password} alt="password" className="input-icon" />
+                <div className="password-wrapper">
                   <input
-                    className="w-full bg-transparent border-2 px-2 py-1 border-slate-300 rounded-xl pr-10"
                     type={showPassword ? "text" : "password"}
                     id="password"
                     placeholder="Enter your password"
                     onChange={handleChange}
                     required
+                    className="input-field password-input"
                   />
-
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+                    className="toggle-password"
                   >
                     <img
                       src={showPassword ? hidePasswordIcon : showPasswordIcon}
                       alt="toggle password visibility"
-                      className="w-5 h-5"
+                      className="toggle-icon"
                     />
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 flex justify-between items-center"></div>
-            <p className="mt-5 text-center">
+            <p className="register-text">
               Do not have an account?{" "}
-              <Link to="/register" className="text-slate-500 cursor-pointer">
+              <Link to="/register" className="register-link">
                 Register
               </Link>
             </p>
 
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                className="bg-slate-500 text-white uppercase text-lg font-semibold px-5 py-3 rounded-3xl mt-7 hover:scale-[1.02] ease-in-out active:scale-[0.98]"
-                disabled={loading}
-              >
+            <div className="button-wrapper">
+              <button type="submit" className="login-button" disabled={loading}>
                 {loading ? "Loading..." : "Login"}
               </button>
             </div>
-            <div className="flex items-center justify-center mt-5">
+
+            <div className="button-wrapper">
               <button
                 type="button"
                 onClick={() =>
                   (window.location.href =
                     "http://localhost:8080/oauth2/authorization/google")
                 }
-                className="text-sm uppercase border-2 px-4 py-2 text-slate-800 border-slate-300 rounded-xl hover:scale-[1.02] ease-in-out active:scale-[0.98]"
+                className="google-button"
               >
                 Continue with Google
               </button>

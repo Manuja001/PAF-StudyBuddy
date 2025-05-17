@@ -185,9 +185,6 @@ const CreateStudyPlan = () => {
       const response = await fetch('http://localhost:8080/api/study-plans', {
         method: 'POST',
         body: formData,
-        headers: {
-          'Accept': 'application/json',
-        },
         credentials: 'include'
       });
 

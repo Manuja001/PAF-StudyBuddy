@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import UserProfile from "../assets/userProfile1.png";
 import EditIcon from "../assets/pen.png";
 import axios from "../config/axios";
+import { FiEdit2, FiMail, FiUser, FiBook, FiMessageCircle, FiLogOut } from "react-icons/fi";
 
 function Profile() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
-    // Fetch user profile data from API
     const fetchProfile = async () => {
       try {
         const response = await axios.get(`/api/users/${id}`, {});
@@ -24,12 +24,9 @@ function Profile() {
     };
     fetchProfile();
   }, [id]);
-  console.log(id);
 
-  // Function to handle profile picture change
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -39,14 +36,10 @@ function Profile() {
     }
   };
 
-  // Function to handle profile update
   const handleProfileUpdate = () => {
     setIsEditing(false);
-    //send updated profile data to the server
-
     const updateProfile = async () => {
       try {
-        console.log(profile);
         const response = await fetch(`http://localhost:8080/api/users/${id}`, {
           method: "PUT",
           headers: {
@@ -65,215 +58,247 @@ function Profile() {
         toast.error("Failed to update profile. Please try again.");
       }
     };
-    console.log(profile);
     updateProfile();
   };
 
-  if (!profile) {
-    // Show a loading state until the profile data is fetched
-    return <div>Loading...</div>;
-  }
-
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login"; // Redirect to login page
+    window.location.href = "/login";
   };
 
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-white pt-20">
+        <div className="loading text-gray-600 text-center py-20">Loading profile data...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen py-10">
-      <div className="container mx-auto bg-white rounded-2xl shadow-xl p-10 w-[90%] max-w-3xl">
-        <div className="text-center mb-6 ">
-          <img
-            src={profile.profilePictureUrl || UserProfile}
-            alt="Profile"
-            className="rounded-full mx-auto w-32 h-32 border-4 p-2 shadow-md  border-amber-600"
-          />
-          <h1 className="text-3xl font-extrabold mt-4">
-            {profile.firstName} {profile.lastName}
-          </h1>
-          <p className="text-gray-600 text-sm">{profile.email}</p>
-        </div>
+    <div className="h-screen bg-[#f8f9fa] pt-20 pb-8">
+      <div className="w-[90%] h-[calc(100vh-48px)] max-w-[1400px] mx-auto">
+        <div className="flex flex-col lg:flex-row gap-8 h-full">
+          {/* Sidebar */}
+          <div className="w-full lg:w-[380px] flex-shrink-0">
+            <div className="bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden border border-gray-100 sticky top-6">
+              {/* Profile Image Section */}
+              <div className="relative">
+                <div className="h-24 bg-gradient-to-r from-[#fb5e2e] to-[#ff7346]"></div>
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
+                  <div className="relative">
+                    <img
+                      src={profile.profilePictureUrl || UserProfile}
+                      alt="Profile"
+                      className="w-20 h-20 rounded-full border-4 border-white shadow-[0_2px_8px_rgba(0,0,0,0.08)] object-cover"
+                    />
+                    {isEditing && (
+                      <label className="absolute bottom-0 right-0 bg-white rounded-md p-2 shadow-[0_2px_4px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-shadow">
+                        <FiEdit2 className="w-4 h-4 text-[#fb5e2e]" />
+                        <input
+                          type="file"
+                          className="hidden"
+                          onChange={handleProfilePictureChange}
+                          accept="image/*"
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-        <div className="bg-sky-100 p-5 rounded-xl shadow mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-sky-900">
-            Profile Details
-          </h2>
-          <div className="space-y-4">
-            {isEditing ? (
-              <div>
-                <div className="mb-4">
-                  <input
-                    type="file"
-                    className="border p-2 rounded-md w-full"
-                    onChange={handleProfilePictureChange}
-                  />
+              {/* Profile Info */}
+              <div className="pt-12 pb-5 px-6">
+                <h1 className="text-xl font-bold text-center text-gray-900">
+                  {profile.firstName} {profile.lastName}
+                </h1>
+                <p className="text-gray-500 text-sm text-center mt-1">{profile.email}</p>
+                
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div className="text-center p-3 rounded-lg bg-orange-50">
+                    <p className="text-xl font-bold text-[#fb5e2e]">{profile.followers || 0}</p>
+                    <p className="text-xs text-gray-600">Followers</p>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-orange-50">
+                    <p className="text-xl font-bold text-[#fb5e2e]">{profile.following || 0}</p>
+                    <p className="text-xs text-gray-600">Following</p>
+                  </div>
                 </div>
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    className="border p-2 rounded-md w-full"
-                    value={profile.firstName}
-                    onChange={(e) =>
-                      setProfile({ ...profile, firstName: e.target.value })
-                    }
-                    placeholder="Enter your First Name"
-                  />
-                </div>
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    className="border p-2 rounded-md w-full"
-                    value={profile.lastName}
-                    onChange={(e) =>
-                      setProfile({ ...profile, lastName: e.target.value })
-                    }
-                    placeholder="Enter your Last Name"
-                  />
-                </div>
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    className="border p-2 rounded-md w-full"
-                    value={profile.email}
-                    onChange={(e) =>
-                      setProfile({ ...profile, email: e.target.value })
-                    }
-                    placeholder="Change your Email address"
-                  />
-                </div>
-                <div className="mb-4">
-                  <textarea
-                    className="border p-2 rounded-md w-full"
-                    value={profile.bio}
-                    onChange={(e) =>
-                      setProfile({ ...profile, bio: e.target.value })
-                    }
-                    placeholder="Enter your bio"
-                  />
-                </div>
-                <div className="text-center flex place-content-evenly">
+
+                {/* Profile Details */}
+                {isEditing ? (
+                  <div className="mt-6 space-y-4">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input
+                          type="text"
+                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-[#fb5e2e] focus:ring-1 focus:ring-[#fb5e2e] outline-none"
+                          value={profile.firstName}
+                          onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input
+                          type="text"
+                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-[#fb5e2e] focus:ring-1 focus:ring-[#fb5e2e] outline-none"
+                          value={profile.lastName}
+                          onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input
+                          type="email"
+                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-[#fb5e2e] focus:ring-1 focus:ring-[#fb5e2e] outline-none"
+                          value={profile.email}
+                          onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                        <textarea
+                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-[#fb5e2e] focus:ring-1 focus:ring-[#fb5e2e] outline-none"
+                          rows="4"
+                          value={profile.bio}
+                          onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-6 space-y-4">
+                    <p className="text-gray-600 leading-relaxed text-center">{profile.bio}</p>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+                        <FiUser className="w-5 h-5 text-[#fb5e2e]" />
+                        <div>
+                          <p className="text-sm text-gray-500">Full Name</p>
+                          <p className="font-medium text-gray-900">{profile.firstName} {profile.lastName}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+                        <FiMail className="w-5 h-5 text-[#fb5e2e]" />
+                        <div>
+                          <p className="text-sm text-gray-500">Email</p>
+                          <p className="font-medium text-gray-900">{profile.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="mt-6 space-y-2">
                   <button
-                    onClick={handleProfileUpdate}
-                    className="bg-green-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#fb5e2e] text-white hover:bg-[#ff7346] transition-all shadow-[0_2px_4px_rgba(251,94,46,0.2)] hover:shadow-[0_2px_8px_rgba(251,94,46,0.3)]"
                   >
-                    Save Changes
+                    <FiEdit2 className="w-4 h-4" />
+                    {isEditing ? "Save Profile" : "Edit Profile"}
                   </button>
                   <button
-                    onClick={() => {
-                      setIsEditing(false);
-                      // Re-fetch original profile data if discard is clicked
-                      fetch(`http://localhost:8080/api/users/${id}`, {
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                          )}`,
-                        },
-                      })
-                        .then((res) => res.json())
-                        .then((data) => setProfile(data));
-                    }}
-                    className="bg-red-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-all"
                   >
-                    Discard
+                    <FiLogOut className="w-4 h-4" />
+                    Log out
+                  </button>
+                  <button
+                    onClick={() => window.location.href = "/chatBot"}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-100 transition-all"
+                  >
+                    <FiMessageCircle className="w-4 h-4" />
+                    Chat Bot
                   </button>
                 </div>
               </div>
-            ) : (
-              <div>
-                <p>{profile.bio}</p>
-                <div className="text-center mt-4">
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="space-y-6">
+              {/* Posts Section */}
+              <div className="bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-4 border border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-5 bg-[#fb5e2e] rounded-full"></div>
+                    <h2 className="text-lg font-bold text-gray-900">My Posts</h2>
+                  </div>
+                  <button 
+                    onClick={() => navigate('/create-post')}
+                    className="px-3 py-1.5 bg-[#fb5e2e] text-white text-sm rounded-lg hover:bg-[#ff7346] transition-all shadow-[0_2px_4px_rgba(251,94,46,0.2)] hover:shadow-[0_2px_8px_rgba(251,94,46,0.3)]"
                   >
-                    Edit Profile
+                    Create New Post
                   </button>
                 </div>
+
+                <div className="space-y-2">
+                  <div className="p-2.5 rounded-lg border border-gray-100 hover:border-[#fb5e2e] transition-all hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                    <h3 className="font-medium text-gray-900 text-sm">How to build a React App</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">Posted on Jan 15, 2024</p>
+                    <p className="text-gray-600 mt-1 text-xs line-clamp-1">
+                      In this post, I walk through the process of setting up a React app from scratch.
+                    </p>
+                  </div>
+                  <div className="p-2.5 rounded-lg border border-gray-100 hover:border-[#fb5e2e] transition-all hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                    <h3 className="font-medium text-gray-900 text-sm">Mastering Spring Boot</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">Posted on Jan 12, 2024</p>
+                    <p className="text-gray-600 mt-1 text-xs line-clamp-1">
+                      Spring Boot simplifies Java development. Here you can find everything you need to know to get started.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => navigate('/posts')}
+                  className="w-full mt-3 px-4 py-1.5 text-[#fb5e2e] text-sm bg-orange-50 rounded-lg hover:bg-orange-100 transition-all font-medium"
+                >
+                  View All Posts
+                </button>
               </div>
-            )}
-          </div>
-        </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 gap-4 text-center mb-6">
-          <div className="bg-green-100 p-4 rounded-xl shadow hover:scale-105 transition">
-            <p className="text-2xl font-bold text-green-600">
-              {profile.followers}
-            </p>
-            <p className="text-sm font-medium text-gray-700">Followers</p>
-          </div>
-          <div className="bg-yellow-100 p-4 rounded-xl shadow hover:scale-105 transition">
-            <p className="text-2xl font-bold text-yellow-600">
-              {profile.following}
-            </p>
-            <p className="text-sm font-medium text-gray-700">Following</p>
-          </div>
-        </div>
+              {/* Study Plans Section */}
+              <div className="bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.08)] p-4 border border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-5 bg-[#fb5e2e] rounded-full"></div>
+                    <h2 className="text-lg font-bold text-gray-900">My Study Plans</h2>
+                  </div>
+                  <button 
+                    onClick={() => navigate('/study-plan')}
+                    className="px-3 py-1.5 bg-[#fb5e2e] text-white text-sm rounded-lg hover:bg-[#ff7346] transition-all shadow-[0_2px_4px_rgba(251,94,46,0.2)] hover:shadow-[0_2px_8px_rgba(251,94,46,0.3)]"
+                  >
+                    Create Study Plan
+                  </button>
+                </div>
 
-        {/* Follow Button */}
-        <div className="text-center mb-6">
-          <button
-            className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition"
-            // navigate to /chatbot  on click
-            onClick={() => {
-              window.location.href = "/chatBot";
-            }}
-          >
-            Chat Bot
-          </button>
-        </div>
+                <div className="space-y-2">
+                  <div className="p-2.5 rounded-lg border border-gray-100 hover:border-[#fb5e2e] transition-all hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                    <h3 className="font-medium text-gray-900 text-sm">Final Exam Preparation</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">Created on Jan 20, 2024</p>
+                    <p className="text-gray-600 mt-1 text-xs line-clamp-1">
+                      Comprehensive study plan for final examinations covering all major topics.
+                    </p>
+                  </div>
+                  <div className="p-2.5 rounded-lg border border-gray-100 hover:border-[#fb5e2e] transition-all hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                    <h3 className="font-medium text-gray-900 text-sm">Weekly Study Schedule</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">Created on Jan 18, 2024</p>
+                    <p className="text-gray-600 mt-1 text-xs line-clamp-1">
+                      Regular weekly study schedule with daily topic breakdown and goals.
+                    </p>
+                  </div>
+                </div>
 
-        {/* Profile Details Section */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center bg-indigo-100 p-4 rounded-xl shadow">
-            <span className="font-semibold text-indigo-900">Email:</span>
-            <span className="text-indigo-700">{profile.email}</span>
-            <img src={EditIcon} alt="Edit" className="w-5 h-5 cursor-pointer" />
-          </div>
-
-          <div className="flex justify-between items-center bg-pink-100 p-4 rounded-xl shadow">
-            <span className="font-semibold text-pink-900">Profile Status:</span>
-            <span className="text-green-600 font-bold">Active</span>
-          </div>
-        </div>
-
-        {/* Post Section */}
-
-        <div className="bg-purple-100 p-5 rounded-xl shadow mb-6 mt-8">
-          <h2 className="text-xl font-semibold mb-2 text-purple-900">
-            My Posts
-          </h2>
-          <div className="space-y-4">
-            <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition">
-              <h3 className="text-lg font-bold">How to build a React App</h3>
-              <p className="text-gray-600 text-sm">Posted on Jan 15, 2024</p>
-              <p className="text-gray-700 mt-2">
-                In this post, I walk through the process of setting up a React
-                app from scratch.
-              </p>
-            </div>
-            <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition">
-              <h3 className="text-lg font-bold">Mastering Spring Boot</h3>
-              <p className="text-gray-600 text-sm">Posted on Jan 12, 2024</p>
-              <p className="text-gray-700 mt-2">
-                Spring Boot simplifies Java development. Here you can find
-                everything you need to know to get started.
-              </p>
-            </div>
-            <div className="text-center mt-4 flex place-content-evenly">
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4">
-                View All Posts
-              </button>
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4 ml-4">
-                Create New Post
-              </button>
-              <button
-                className="bg-red-500 text-white px-6 py-2 rounded-full hover:scale-105 transition mt-4 ml-4"
-                onClick={handleLogout}
-              >
-                Log out
-              </button>
+                <button
+                  onClick={() => navigate('/view-study-plan')}
+                  className="w-full mt-3 px-4 py-1.5 text-[#fb5e2e] text-sm bg-orange-50 rounded-lg hover:bg-orange-100 transition-all font-medium"
+                >
+                  View All Study Plans
+                </button>
+              </div>
             </div>
           </div>
         </div>

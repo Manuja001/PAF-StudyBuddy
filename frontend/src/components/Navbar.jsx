@@ -1,11 +1,47 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logoBlack from "../assets/logoblack.png";
 import "./Navbar.css";
+import { FiUser } from "react-icons/fi";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [userId, setUserId] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is authenticated by looking for token in localStorage
+    const token = localStorage.getItem('token');
+    const storedUserId = localStorage.getItem('userId');
+    setIsAuthenticated(!!token);
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else if (token) {
+      // If we have a token but no userId, redirect to login
+      handleLogout();
+    }
+  }, [location]); // Re-check when location changes
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    setIsAuthenticated(false);
+    setUserId(null);
+    setShowLogin(false);
+    navigate('/login');
+  };
+
+  const handleAuthButtonClick = () => {
+    if (!showLogin) {
+      setShowLogin(true);
+      navigate('/register');
+    } else {
+      navigate('/login');
+    }
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -51,41 +87,30 @@ const Navbar = () => {
               <Link to="/" className={`nav-item ${isActive('/') ? 'nav-item-active' : 'nav-item-default'}`}>Home</Link>
             </li>
             <li>
-              <a href="#features" 
-                 onClick={(e) => handleNavClick(e, 'features')} 
-                 className="nav-item nav-item-default">
-                Features
-              </a>
-            </li>
-            <li>
-              <a href="#about" 
-                 onClick={(e) => handleNavClick(e, 'about')} 
-                 className="nav-item nav-item-default">
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#contact" 
-                 onClick={(e) => handleNavClick(e, 'contact')} 
-                 className="nav-item nav-item-default">
-                Contact
-              </a>
-            </li>
-            <li>
-              <Link to="/study-plan" className={`nav-item ${isActive('/study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>Create Study Plan</Link>
+              <Link to="/posts" className={`nav-item ${isActive('/posts') ? 'nav-item-active' : 'nav-item-default'}`}>Posts</Link>
             </li>
             <li>
               <Link to="/view-study-plan" className={`nav-item ${isActive('/view-study-plan') ? 'nav-item-active' : 'nav-item-default'}`}>View Study Plan</Link>
             </li>
             <li>
-              <Link to="/posts" className={`nav-item ${isActive('/posts') ? 'nav-item-active' : 'nav-item-default'}`}>Posts</Link>
+              <Link to="/chatBot" className={`nav-item ${isActive('/chatBot') ? 'nav-item-active' : 'nav-item-default'}`}>Chat Bot</Link>
             </li>
-            <li>
-              <Link to="/login" className={`nav-item ${isActive('/login') ? 'nav-item-active' : 'nav-item-default'}`}>Login</Link>
-            </li>
-            <li>
-              <Link to="/signup" className="nav-button">Sign Up</Link>
-            </li>
+            {isAuthenticated && userId ? (
+              <li>
+                <Link 
+                  to={`/profile/${userId}`} 
+                  className="nav-button"
+                >
+                  Profile
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <button onClick={handleAuthButtonClick} className="nav-button">
+                  {showLogin ? 'Login' : 'Sign Up'}
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

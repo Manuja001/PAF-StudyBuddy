@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import HomePage from "./pages/HomePage";
+import HomePage from "./pages/HomePage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
@@ -13,14 +13,15 @@ import Navbar from "./components/Navbar";
 import CreateStudyPlan from "./components/CreateStudyPlan";
 import ViewStudyPlan from "./components/ViewStudyPlan";
 import StudyPlanList from "./components/StudyPlanList";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <BrowserRouter>
       {/* <Header /> */}
       <ToastContainer />
+      <Navbar />
       <Routes>
-        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/HomePage" element={<HomePage />} />
@@ -32,46 +33,11 @@ function App() {
         <Route path="/Profile/:id" element={<Profile />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/chatBot" element={<ChatBot />} />
-         <Route path="/study-plan" element={<CreateStudyPlan />} />
-          <Route path="/view-study-plan" element={<StudyPlanList />} />
-          <Route path="/view-study-plan/:id" element={<ViewStudyPlan />} />
+        <Route path="/study-plan" element={<CreateStudyPlan />} />
+        <Route path="/view-study-plan" element={<StudyPlanList />} />
+        <Route path="/view-study-plan/:id" element={<ViewStudyPlan />} />
       </Routes>
     </BrowserRouter>
-=========
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Hero from "./components/Hero";
-import Features from "./components/Features";
-import About from "./components/About";
-import Navbar from "./components/Navbar";
-import Contact from "./components/Contact";
-import CreateStudyPlan from "./components/CreateStudyPlan";
-import ViewStudyPlan from "./components/ViewStudyPlan";
-
-function HomePage() {
-  return (
-    <main>
-      <Hero />
-      <Features />
-      <About />
-      <Contact />
-    </main>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <div className="min-h-screen bg-white">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/study-plan" element={<CreateStudyPlan />} />
-          <Route path="/view-study-plan" element={<StudyPlanList />} />
-          <Route path="/view-study-plan/:id" element={<ViewStudyPlan />} />
-        </Routes>
-      </div>
-      </BrowserRouter>
   );
 }
 
